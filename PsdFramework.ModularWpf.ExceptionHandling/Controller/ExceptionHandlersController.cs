@@ -4,9 +4,9 @@ using System.Windows;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
-using PsdFramework.ModularWpf.ExceptionHandlers.Models;
+using PsdFramework.ModularWpf.ExceptionHandling.Models;
 
-namespace PsdFramework.ModularWpf.ExceptionHandlers.Controller;
+namespace PsdFramework.ModularWpf.ExceptionHandling.Controller;
 
 public sealed class ExceptionHandlersController
 {

@@ -2,10 +2,10 @@ using System.Windows.Threading;
 
 using Microsoft.Extensions.DependencyInjection;
 
-using PsdFramework.ModularWpf.ExceptionHandlers.Controller;
+using PsdFramework.ModularWpf.ExceptionHandling.Controller;
 using PsdFramework.ModularWpf.General.Models;
 
-namespace PsdFramework.ModularWpf.ExceptionHandlers.Extensions;
+namespace PsdFramework.ModularWpf.ExceptionHandling.Extensions;
 
 public static class ModularApplicationExtensions
 {

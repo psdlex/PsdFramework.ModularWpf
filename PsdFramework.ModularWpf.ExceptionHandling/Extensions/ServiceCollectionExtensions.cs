@@ -1,9 +1,9 @@
 using Microsoft.Extensions.DependencyInjection;
 
-using PsdFramework.ModularWpf.ExceptionHandlers.Controller;
-using PsdFramework.ModularWpf.ExceptionHandlers.Models;
+using PsdFramework.ModularWpf.ExceptionHandling.Controller;
+using PsdFramework.ModularWpf.ExceptionHandling.Models;
 
-namespace PsdFramework.ModularWpf.ExceptionHandlers.Extensions;
+namespace PsdFramework.ModularWpf.ExceptionHandling.Extensions;
 
 public static class ServiceCollectionExtensions
 {

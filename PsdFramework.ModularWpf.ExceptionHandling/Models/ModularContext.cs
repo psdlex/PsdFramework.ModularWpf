@@ -1,4 +1,4 @@
-namespace PsdFramework.ModularWpf.ExceptionHandlers.Models;
+namespace PsdFramework.ModularWpf.ExceptionHandling.Models;
 
 public sealed class ModularContext
 {

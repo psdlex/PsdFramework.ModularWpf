@@ -1,4 +1,4 @@
-namespace PsdFramework.ModularWpf.ExceptionHandlers.Controller;
+namespace PsdFramework.ModularWpf.ExceptionHandling.Controller;
 
 public enum ControllerUnhandledExceptionBehavior : byte
 {
