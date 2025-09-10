@@ -9,7 +9,7 @@ namespace PsdFramework.ModularWpf.ExceptionHandlers.Extensions;
 
 public static class ModularApplicationExtensions
 {
-    public static ModularApplication AddGlobalExceptionHandler(this ModularApplication app)
+    public static IModularApplication AddGlobalExceptionHandler(this IModularApplication app)
     {
         DispatcherUnhandledExceptionEventHandler handler = null!;
         handler = async (sender, e) =>
