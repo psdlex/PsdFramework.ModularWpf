@@ -1,0 +1,1 @@
+# PsdFramework.ModularWpf.Logging

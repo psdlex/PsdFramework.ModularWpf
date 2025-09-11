@@ -7,6 +7,15 @@
     <UseWPF>true</UseWPF>
     <ImplicitUsings>enable</ImplicitUsings>
 	  <BaseOutputPath>./../build/Logging</BaseOutputPath>
+	  <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+	  <Title>PsdFramework.ModularWpf.Logging</Title>
+	  <Description>Logging extensions for the PsdFramework.ModularWpf
+framework</Description>
+	  <PackageProjectUrl>https://github.com/psdlex/PsdFramework.ModularWpf</PackageProjectUrl>
+	  <PackageReadmeFile>Readme.MD</PackageReadmeFile>
+	  <RepositoryUrl>https://github.com/psdlex/PsdFramework.ModularWpf/tree/master/PsdFramework.ModularWpf.Logging</RepositoryUrl>
+	  <PackageLicenseExpression>MIT</PackageLicenseExpression>
+	  <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
   </PropertyGroup>
 
   <ItemGroup>
@@ -17,6 +26,13 @@
     <PackageReference Include="Serilog" Version="4.3.0" />
     <PackageReference Include="Serilog.Sinks.Console" Version="6.0.0" />
     <PackageReference Include="Serilog.Sinks.File" Version="7.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Readme.MD">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
   </ItemGroup>
 
 </Project>
