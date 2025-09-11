@@ -1,5 +1,6 @@
 using System.Runtime.ExceptionServices;
 using System.Windows;
+using System.Windows.Threading;
 
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -26,11 +27,11 @@ public sealed class ExceptionHandlersController
         _handlers = GetSortedHandlers(unsortedHandlers).ToArray();
     }
 
-    public async Task Handle(Exception exception)
+    public async Task Handle(DispatcherUnhandledExceptionEventArgs e)
     {
-        _logger.LogWarning("Exception has been thrown and is being handled: {Exception}", exception);
+        _logger.LogWarning("Exception has been thrown and is being handled: {Exception}", e.Exception.Message);
 
-        var context = new ModularContext(exception);
+        var context = new ModularContext(e);
 
         foreach (var handler in GetSortedHandlers(_handlers))
         {
@@ -43,7 +44,7 @@ public sealed class ExceptionHandlersController
             }
         }
 
-        ProcessUnhandledException(exception);
+        ProcessUnhandledException(e.Exception);
     }
 
     private void ProcessUnhandledException(Exception exception)
