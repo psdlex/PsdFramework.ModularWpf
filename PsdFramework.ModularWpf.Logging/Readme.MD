@@ -1,10 +1,10 @@
 # PsdFramework.ModularWpf.Logging
 
-Logging extensions for the `PsdFramework.ModularWpf` framework.
+#### Logging extensions for the `PsdFramework.ModularWpf` framework.
 
 ## How to configure?
-#### It can only be configured through the `IConfiguration` interface, usually through the `appsettings.json` file.
-#### The limitations are set for the sake of simplicity.
+It can only be configured through the `IConfiguration` interface, usually through the `appsettings.json` file.
+The limitations are set for the sake of simplicity.
 ### Configuration example:
 ```json
 {
@@ -23,7 +23,7 @@ Logging extensions for the `PsdFramework.ModularWpf` framework.
 }
 ```
 
-If the allowed namespaces are not specified, the logger will allow everything.
+#### If the allowed namespaces are not specified, the logger will allow everything.
 
 ## How to setup?
 ```csharp
