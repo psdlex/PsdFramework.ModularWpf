@@ -1,6 +1,6 @@
 # PsdFramework.ModularWpf.ExceptionHandling
 
-Exception handling extensions for the `PsdFramework.ModularWpf`
+#### Exception handling extensions for the `PsdFramework.ModularWpf`
 
 ## How to configure?
 #### First, your `App.xaml.cs` must implement `IApplicationModule` in order to use extensions methods.
@@ -23,5 +23,5 @@ public sealed partial class App : System.Windows.Application, IModularApplicatio
 }
 ```
 
-Handling pipeline: `Exception` -> `DispatcherUnhandledException` -> `ExceptionHandlersController` -> `Specific Exception Handler` or `Global Handler`
-Unhandled -> rethrow exception without handling it.
+#### Handling pipeline: `Exception` -> `DispatcherUnhandledException` -> `ExceptionHandlersController` -> `Specific Exception Handler` or `Global Handler`
+#### Unhandled -> rethrow exception without handling it.
