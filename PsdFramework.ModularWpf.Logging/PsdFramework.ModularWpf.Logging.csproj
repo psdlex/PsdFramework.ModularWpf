@@ -1,22 +1,22 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFrameworks>net6.0-windows;net9.0-windows</TargetFrameworks>
-    <Nullable>enable</Nullable>
-	  <LangVersion>latest</LangVersion>
-    <UseWPF>true</UseWPF>
-    <ImplicitUsings>enable</ImplicitUsings>
-	  <BaseOutputPath>./../build/Logging</BaseOutputPath>
-	  <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-	  <Title>PsdFramework.ModularWpf.Logging</Title>
-	  <Description>Logging extensions for the PsdFramework.ModularWpf
-framework</Description>
-	  <PackageProjectUrl>https://github.com/psdlex/PsdFramework.ModularWpf</PackageProjectUrl>
-	  <PackageReadmeFile>README.md</PackageReadmeFile>
-	  <RepositoryUrl>https://github.com/psdlex/PsdFramework.ModularWpf/tree/master/PsdFramework.ModularWpf.Logging</RepositoryUrl>
-	  <PackageLicenseExpression>MIT</PackageLicenseExpression>
-	  <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFrameworks>net6.0-windows;net9.0-windows</TargetFrameworks>
+		<Nullable>enable</Nullable>
+		<LangVersion>latest</LangVersion>
+		<UseWPF>true</UseWPF>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<BaseOutputPath>./../build/Logging</BaseOutputPath>
+		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+		<Title>PsdFramework.ModularWpf.Logging</Title>
+		<Description>Logging extensions for the PsdFramework.ModularWpf framework</Description>
+		<PackageProjectUrl>https://github.com/psdlex/PsdFramework.ModularWpf</PackageProjectUrl>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
+		<RepositoryUrl>https://github.com/psdlex/PsdFramework.ModularWpf/tree/master/PsdFramework.ModularWpf.Logging</RepositoryUrl>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
+		<Version>1.1.0</Version>
+	</PropertyGroup>
 
 	<!-- For .NET 6 only -->
 	<ItemGroup Condition="'$(TargetFramework)' == 'net6.0-windows'">
@@ -32,11 +32,11 @@ framework</Description>
 		<PackageReference Include="Microsoft.Extensions.Logging" Version="9.0.9" />
 	</ItemGroup>
 
-  <ItemGroup>
-	  <None Include="README.md">
-		  <Pack>True</Pack>
-		  <PackagePath>\</PackagePath>
-	  </None>
-  </ItemGroup>
+	<ItemGroup>
+		<None Include="README.md">
+			<Pack>True</Pack>
+			<PackagePath>\</PackagePath>
+		</None>
+	</ItemGroup>
 
 </Project>

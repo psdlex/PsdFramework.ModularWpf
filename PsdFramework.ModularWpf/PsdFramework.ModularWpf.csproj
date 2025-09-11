@@ -1,39 +1,39 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net6.0-windows</TargetFramework>
-    <Nullable>enable</Nullable>
-    <UseWPF>true</UseWPF>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <BaseOutputPath>./../build/ModularWpf</BaseOutputPath>
-    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-    <Title>PsdFramework.ModularWpf</Title>
-    <Description>A small framework library for creating
-comprehensive modular WPF applications</Description>
-    <PackageProjectUrl>https://github.com/psdlex/PsdFramework.ModularWpf</PackageProjectUrl>
-    <PackageReadmeFile>README.md</PackageReadmeFile>
-    <RepositoryUrl>https://github.com/psdlex/PsdFramework.ModularWpf</RepositoryUrl>
-    <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net6.0-windows</TargetFramework>
+		<Nullable>enable</Nullable>
+		<UseWPF>true</UseWPF>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<BaseOutputPath>./../build/ModularWpf</BaseOutputPath>
+		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+		<Title>PsdFramework.ModularWpf</Title>
+		<Description>A small framework library for creating comprehensive modular WPF applications</Description>
+		<PackageProjectUrl>https://github.com/psdlex/PsdFramework.ModularWpf</PackageProjectUrl>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
+		<RepositoryUrl>https://github.com/psdlex/PsdFramework.ModularWpf</RepositoryUrl>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
+		<Version>1.1.0</Version>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <Compile Remove="bin\**" />
-    <EmbeddedResource Remove="bin\**" />
-    <None Remove="bin\**" />
-    <Page Remove="bin\**" />
-  </ItemGroup>
+	<ItemGroup>
+		<Compile Remove="bin\**" />
+		<EmbeddedResource Remove="bin\**" />
+		<None Remove="bin\**" />
+		<Page Remove="bin\**" />
+	</ItemGroup>
 
-  <ItemGroup>
-	  <None Include="..\README.md">
-		  <Pack>True</Pack>
-		  <PackagePath>\</PackagePath>
-	  </None>
-  </ItemGroup>
+	<ItemGroup>
+		<None Include="..\README.md">
+			<Pack>True</Pack>
+			<PackagePath>\</PackagePath>
+		</None>
+	</ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0" />
+	</ItemGroup>
 
 </Project>
