@@ -13,7 +13,7 @@ public static class LoggingBuilderExtensions
     {
         var loggers = configuration.GetRequiredSection("ModularLoggers").Get<ModularLoggerData[]>();
         
-        foreach (var logger in loggers)
+        foreach (var logger in loggers ?? [])
         {
             if (logger.Sink == LoggingSink.Console)
                 builder.AddProvider(new ConsoleLoggerProvider(logger));
