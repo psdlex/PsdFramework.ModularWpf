@@ -6,6 +6,12 @@
     <UseWPF>true</UseWPF>
     <ImplicitUsings>enable</ImplicitUsings>
     <BaseOutputPath>./../build/ModularWpf</BaseOutputPath>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <Title>PsdFramework.ModularWpf</Title>
+    <Description>A small framework library for creating
+comprehensive modular WPF applications</Description>
+    <PackageProjectUrl>https://github.com/psdlex/PsdFramework.ModularWpf</PackageProjectUrl>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -13,6 +19,13 @@
     <EmbeddedResource Remove="bin\**" />
     <None Remove="bin\**" />
     <Page Remove="bin\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+	  <None Include="..\README.md">
+		  <Pack>True</Pack>
+		  <PackagePath>\</PackagePath>
+	  </None>
   </ItemGroup>
 
   <ItemGroup>
