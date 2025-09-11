@@ -6,7 +6,7 @@
     <UseWPF>true</UseWPF>
 	  <LangVersion>latest</LangVersion>
     <ImplicitUsings>enable</ImplicitUsings>
-    <BaseOutputPath>./../build/ModularWpf.ExceptionHandlers</BaseOutputPath>
+    <BaseOutputPath>./../build/ExceptionHandling</BaseOutputPath>
   </PropertyGroup>
 
   <ItemGroup>

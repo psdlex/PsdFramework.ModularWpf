@@ -19,7 +19,7 @@ public static class ModularApplicationExtensions
                 var controller = app.ServiceProvider?.GetRequiredService<ExceptionHandlersController>()
                     ?? throw new ApplicationException("ServiceProvider is not configured or ExceptionHandlersController is not registered.");
 
-                await controller.Handle(e.Exception);
+                await controller.Handle(e);
             }
             catch
             {

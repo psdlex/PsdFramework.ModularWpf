@@ -1,13 +1,20 @@
+using System.Windows.Threading;
+
 namespace PsdFramework.ModularWpf.ExceptionHandling.Models;
 
 public sealed class ModularContext
 {
-    public ModularContext(Exception exception)
+    private readonly DispatcherUnhandledExceptionEventArgs _exceptionArgs;
+
+    public ModularContext(DispatcherUnhandledExceptionEventArgs exceptionArgs)
     {
-        Exception = exception;
+        _exceptionArgs = exceptionArgs;
     }
 
-    public Exception Exception { get; }
-
-    public bool IsHandled { get; set; }
+    public Exception Exception => _exceptionArgs.Exception;
+    public bool IsHandled
+    {
+        get => _exceptionArgs.Handled;
+        set => _exceptionArgs.Handled = value;
+    }
 }
