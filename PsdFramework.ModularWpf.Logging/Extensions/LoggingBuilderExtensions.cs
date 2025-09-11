@@ -15,11 +15,14 @@ public static class LoggingBuilderExtensions
         
         foreach (var logger in loggers ?? [])
         {
-            if (logger.Sink == LoggingSink.Console)
-                builder.AddProvider(new ConsoleLoggerProvider(logger));
+            Func<ModularLoggerData, ILoggerProvider> provider = logger.Sink switch
+            {
+                LoggingSink.Console => (data) => new ConsoleLoggerProvider(data),
+                LoggingSink.File => (data) => new FileLoggerProvider(data),
+                _ => throw new ArgumentException("Invalid LoggingSink", nameof(logger.Sink))
+            };
 
-            else if (logger.Sink == LoggingSink.File)
-                builder.AddProvider(new FileLoggerProvider(logger));
+            builder.AddProvider(provider(logger));
         }
 
         return builder;
