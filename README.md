@@ -6,8 +6,9 @@
 - IServiceCollection extensions that help with registering common models of the MVVM pattern: `AddView<TView, TViewModel>()`, `AddCachedView<TView, TViewModel>()`, `AddViewModel<TViewModel>()`
 #### Make sure to demand `IView<TView>` or `IView<TView, TViewModel>` **but not the raw view object**, otherwise the viewmodel will be not be bound to the view and you will just create a plain view.
 - Modular Windows - you can assign a `Window` object with a `IModularWindow` interface, then await the window and get the result via the service
+- (New) Navigation Models - now you can make your `ViewModel` object a `NavigationModel` object then register them through `services.AddNavigationModels()` extension method.
 
-## How to use
+## How to use modular windows?
 #### First lets define our window object:
 ```csharp
 public sealed partial class MyModularWindow : Window, IModularWindow
@@ -55,3 +56,6 @@ public sealed partial class MyViewModel : ObservableObject
 	}
 }
 ```
+
+## Todos
+- A full scale documentation
