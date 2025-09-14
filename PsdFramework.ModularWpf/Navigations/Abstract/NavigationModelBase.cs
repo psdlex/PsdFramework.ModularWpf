@@ -1,35 +1,40 @@
+
 using CommunityToolkit.Mvvm.ComponentModel;
 
-using PsdFramework.ModularWpf.Navigations.Models;
+using PsdFramework.ModularWpf.Navigations.Models.Navigatable;
+using PsdFramework.ModularWpf.Navigations.Models.Navigation;
+using PsdFramework.ModularWpf.Navigations.Provider;
 
 namespace PsdFramework.ModularWpf.Navigations.Abstract;
 
 public abstract partial class NavigationModelBase : ObservableObject, INavigationModel
 {
+    protected NavigationModelBase(INavigationProvider navigationProvider, object category)
+    {
+        NavigationProvider = navigationProvider;
+        Category = category;
+    }
+
+    protected INavigationProvider NavigationProvider { get; }
+    protected object Category { get; }
+
     [ObservableProperty]
-    private ObservableObject? _currentModel;
+    private INavigatableModel? _currentModel;
 
-    protected HashSet<ObservableObject> CachedModels { get; set; } = [];
-
-    public virtual Task NavigateToAsync<TModel>() where TModel : ObservableObject
+    public Task NavigateToAsync<TModel>() where TModel : INavigatableModel
         => NavigateToAsync(typeof(TModel));
 
-    public virtual Task NavigateToAsync(Type type)
+    public Task NavigateToAsync(Type type)
     {
-        var model = CachedModels.FirstOrDefault(m => m.GetType() == type);
-
-        if (model is null)
-            return Task.CompletedTask;
+        var model = NavigationProvider.GetNavigatableModel(type, Category);
 
         CurrentModel = model;
+
         return Task.CompletedTask;
     }
 
-    public virtual Task NavigateToAsync(ObservableObject model)
+    public Task NavigateToAsync(INavigatableModel model)
     {
-        if (CachedModels.Contains(model) == false)
-            CachedModels.Add(model);
-
         CurrentModel = model;
         return Task.CompletedTask;
     }

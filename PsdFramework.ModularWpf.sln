@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PsdFramework.ModularWpf.Exc
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PsdFramework.ModularWpf.Logging", "PsdFramework.ModularWpf.Logging\PsdFramework.ModularWpf.Logging.csproj", "{937FB4D4-D832-4F45-B1C1-177B7810DEDF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PsdFramework.ModularWpf.RunTests", "PsdFramework.ModularWpf.RunTests\PsdFramework.ModularWpf.RunTests.csproj", "{FCC45B00-C133-4506-83F2-A04A1D768C29}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{937FB4D4-D832-4F45-B1C1-177B7810DEDF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{937FB4D4-D832-4F45-B1C1-177B7810DEDF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{937FB4D4-D832-4F45-B1C1-177B7810DEDF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FCC45B00-C133-4506-83F2-A04A1D768C29}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FCC45B00-C133-4506-83F2-A04A1D768C29}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FCC45B00-C133-4506-83F2-A04A1D768C29}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FCC45B00-C133-4506-83F2-A04A1D768C29}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
