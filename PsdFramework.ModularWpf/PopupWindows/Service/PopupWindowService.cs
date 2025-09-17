@@ -31,6 +31,7 @@ public sealed class PopupWindowService : IPopupWindowService
     {
         var componentModel = (TComponentModel)_serviceProvider.GetRequiredKeyedService<IComponentModel>(typeof(TComponentModel));
         var popup = new TPopup();
+        popup.DataContext = componentModel;
 
         TrySetOwner(options, popup);
         ConfigureEvents<TComponentModel, TPopup, TResult>(componentModel, popup, options);
