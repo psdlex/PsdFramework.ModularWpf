@@ -19,12 +19,12 @@ public abstract class ObservablePopupComponentModel<TPopup, TResult> : Observabl
 
     public virtual void OnPopupExit()
     {
-        _completionSource.SetResult(new PopupResult<TResult>(PopupExitBasis.Unexpected, default));
+        _completionSource.TrySetResult(new PopupResult<TResult>(PopupExitBasis.Unexpected, default));
     }
 
     protected virtual void SetResult(TResult result)
     {
-        _completionSource.SetResult(new PopupResult<TResult>(PopupExitBasis.Intentional, result));
+        _completionSource.TrySetResult(new PopupResult<TResult>(PopupExitBasis.Intentional, result));
     }
 
     public Task<PopupResult<TResult>> GetResult() => _completionSource.Task;

@@ -39,8 +39,4 @@
 		<PackageReference Include="Microsoft.Extensions.Options" />
 	</ItemGroup>
 
-	<ItemGroup>
-	  <Folder Include="PopupWindows\Models\Component\" />
-	</ItemGroup>
-
 </Project>

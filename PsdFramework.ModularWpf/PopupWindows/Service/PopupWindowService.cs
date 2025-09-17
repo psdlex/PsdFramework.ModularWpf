@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization.Metadata;
 using System.Windows;
 
 using Microsoft.Extensions.DependencyInjection;
@@ -34,10 +35,20 @@ public sealed class PopupWindowService : IPopupWindowService
         TrySetOwner(options, popup);
         ConfigureEvents<TComponentModel, TPopup, TResult>(componentModel, popup, options);
 
+        var isClosed = false;
+        popup.Closed += (_, _) =>
+        {
+            isClosed = true;
+            componentModel.OnPopupExit();
+        };
+
         var display = GetDisplayFunction(popup, options);
         display();
 
         var result = await componentModel.GetResult();
+
+        if (isClosed == false)
+            popup.Close();
 
         return result;
     }
@@ -55,8 +66,6 @@ public sealed class PopupWindowService : IPopupWindowService
         where TComponentModel : class, IPopupComponentModel<TPopup, TResult>
         where TPopup : Window, new()
     {
-        window.Closed += (_, _) => componentModel.OnPopupExit();
-
         if (options.CloseOnDeactivation)
             window.Deactivated += (s, e) => window.Close();
     }
