@@ -53,7 +53,8 @@ public sealed class NavigatorService : INavigatorService
     {
         await navigation.OnPreNavigated(navigatable);
 
+        navigation.CurrentModel?.OnNavigatedFrom(navigation);
         await navigation.OnNavigated(navigatable);
-        await navigatable.OnNavigated(navigation);
+        await navigatable.OnNavigatedTo(navigation);
     }
 }
