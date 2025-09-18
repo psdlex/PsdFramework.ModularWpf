@@ -1,21 +1,27 @@
-using System.Text.Json.Serialization.Metadata;
 using System.Windows;
 
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
 using PsdFramework.ModularWpf.General.Models.Components;
 using PsdFramework.ModularWpf.PopupWindows.Models;
 using PsdFramework.ModularWpf.PopupWindows.Models.Result;
+using PsdFramework.ModularWpf.PopupWindows.Service.Managers;
 
 namespace PsdFramework.ModularWpf.PopupWindows.Service;
 
 public sealed class PopupWindowService : IPopupWindowService
 {
     private readonly IServiceProvider _serviceProvider;
+    private readonly ILogger<PopupWindowService> _logger;
+    private readonly WindowStateManager _windowStateManager;
 
-    public PopupWindowService(IServiceProvider serviceProvider)
+    public PopupWindowService(IServiceProvider serviceProvider, ILogger<PopupWindowService> logger)
     {
         _serviceProvider = serviceProvider;
+        _logger = logger;
+
+        _windowStateManager = new();
     }
 
     public Task<PopupResult<TResult>> ShowPopup<TComponentModel, TPopup, TResult>()
@@ -29,29 +35,48 @@ public sealed class PopupWindowService : IPopupWindowService
         where TComponentModel : class, IPopupComponentModel<TPopup, TResult>
         where TPopup : Window, new()
     {
+        _logger.LogDebug("Showing new popup: " + typeof(TPopup).Name);
+
         var componentModel = (TComponentModel)_serviceProvider.GetRequiredKeyedService<IComponentModel>(typeof(TComponentModel));
-        var popup = new TPopup();
-        popup.DataContext = componentModel;
+        var popup = CreatePopup<TPopup>(componentModel);
 
         TrySetOwner(options, popup);
         ConfigureEvents<TComponentModel, TPopup, TResult>(componentModel, popup, options);
 
-        var isClosed = false;
-        popup.Closed += (_, _) =>
+        var resultTask = componentModel.GetResult();
+        _ = resultTask.ContinueWith(_ => 
+            popup.Dispatcher.Invoke(() => SafeClose(popup)), 
+            TaskScheduler.Default
+        );
+
+        popup.Show();
+
+        var result = await resultTask;
+
+        _windowStateManager.DisposeState(popup);
+        return result;
+    }
+
+    private TPopup CreatePopup<TPopup>(object dataContext) 
+        where TPopup : Window, new()
+    {
+        var popup = new TPopup();
+        popup.DataContext = dataContext;
+        return popup;
+    }
+
+    private void ConfigureEvents<TComponentModel, TPopup, TResult>(TComponentModel componentModel, Window popup, PopupOptions options)
+        where TComponentModel : class, IPopupComponentModel<TPopup, TResult>
+        where TPopup : Window, new()
+    {
+        popup.Closing += (_, _) =>
         {
-            isClosed = true;
+            _windowStateManager.SetClosingState(popup);
             componentModel.OnPopupExit();
         };
 
-        var display = GetDisplayFunction(popup, options);
-        display();
-
-        var result = await componentModel.GetResult();
-
-        if (isClosed == false)
-            popup.Close();
-
-        return result;
+        if (options.CloseOnDeactivation)
+            popup.Deactivated += (s, e) => SafeClose(popup);
     }
 
     private void TrySetOwner(PopupOptions options, Window window)
@@ -63,18 +88,12 @@ public sealed class PopupWindowService : IPopupWindowService
         window.WindowStartupLocation = WindowStartupLocation.CenterOwner;
     }
 
-    private void ConfigureEvents<TComponentModel, TPopup, TResult>(TComponentModel componentModel, Window window, PopupOptions options)
-        where TComponentModel : class, IPopupComponentModel<TPopup, TResult>
-        where TPopup : Window, new()
+    private void SafeClose(Window window)
     {
-        if (options.CloseOnDeactivation)
-            window.Deactivated += (s, e) => window.Close();
-    }
+        if (_windowStateManager.IsClosing(window))
+            return;
 
-    private Action GetDisplayFunction(Window window, PopupOptions options)
-    {
-        return options.BlockOtherWindows
-            ? () => window.ShowDialog()
-            : window.Show;
+        _windowStateManager.SetClosingState(window);
+        window.Close();
     }
 }
