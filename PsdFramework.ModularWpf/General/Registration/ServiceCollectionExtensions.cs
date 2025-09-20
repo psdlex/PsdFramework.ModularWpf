@@ -4,8 +4,6 @@ using Microsoft.Extensions.DependencyInjection;
 
 using PsdFramework.ModularWpf.General.Models.Components;
 using PsdFramework.ModularWpf.Internal.FeatureUtiliser;
-using PsdFramework.ModularWpf.Navigations;
-using PsdFramework.ModularWpf.Views;
 
 namespace PsdFramework.ModularWpf.General.Registration;
 
