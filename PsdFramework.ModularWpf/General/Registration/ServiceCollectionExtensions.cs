@@ -22,7 +22,7 @@ public static class ServiceCollectionExtensions
                 t.IsAbstract == false &&
                 t.IsAssignableTo(typeof(IComponentModel))
             )
-            .Select(t => new ComponentModelType(t, t.GetCustomAttribute<ComponentModelAttribute>(inherit: true)?.IsCached ?? false))
+            .Select(t => new ComponentModelType(t, t.GetCustomAttributes<ComponentModelAttribute>(inherit: true).FirstOrDefault()?.IsCached ?? false))
             .ToArray();
 
         var utilisers = FeatureUtilisersLocator.FindAll();
