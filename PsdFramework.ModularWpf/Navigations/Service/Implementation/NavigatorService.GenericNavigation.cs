@@ -1,7 +1,7 @@
 using Microsoft.Extensions.DependencyInjection;
-using PsdFramework.ModularWpf.Navigations.Builder;
 using PsdFramework.ModularWpf.Navigations.Models.Navigatable;
 using PsdFramework.ModularWpf.Navigations.Models.Navigation;
+using PsdFramework.ModularWpf.Parameters;
 
 namespace PsdFramework.ModularWpf.Navigations.Service;
 

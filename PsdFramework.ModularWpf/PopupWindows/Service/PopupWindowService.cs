@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
 using PsdFramework.ModularWpf.General.Models.Components;
+using PsdFramework.ModularWpf.Parameters;
 using PsdFramework.ModularWpf.PopupWindows.Models;
 using PsdFramework.ModularWpf.PopupWindows.Models.Result;
 using PsdFramework.ModularWpf.PopupWindows.Service.Managers;
@@ -28,10 +29,31 @@ public sealed class PopupWindowService : IPopupWindowService
         where TComponentModel : class, IPopupComponentModel<TPopup, TResult>
         where TPopup : Window, new()
     {
-        return ShowPopup<TComponentModel, TPopup, TResult>(new PopupOptions());
+        return ShowPopupInternal<TComponentModel, TPopup, TResult>(new PopupOptions(), null);
     }
 
-    public async Task<PopupResult<TResult>> ShowPopup<TComponentModel, TPopup, TResult>(PopupOptions options)
+    public Task<PopupResult<TResult>> ShowPopup<TComponentModel, TPopup, TResult>(PopupOptions options)
+        where TComponentModel : class, IPopupComponentModel<TPopup, TResult>
+        where TPopup : Window, new()
+    {
+        return ShowPopupInternal<TComponentModel, TPopup, TResult>(options, null);
+    }
+
+    public Task<PopupResult<TResult>> ShowPopup<TComponentModel, TPopup, TResult>(Action<ParameterBuilder<TComponentModel>> configureBuilder)
+        where TComponentModel : class, IPopupComponentModel<TPopup, TResult>
+        where TPopup : Window, new()
+    {
+        return ShowPopupInternal<TComponentModel, TPopup, TResult>(new PopupOptions(), configureBuilder);
+    }
+
+    public Task<PopupResult<TResult>> ShowPopup<TComponentModel, TPopup, TResult>(PopupOptions options, Action<ParameterBuilder<TComponentModel>> configureBuilder)
+        where TComponentModel : class, IPopupComponentModel<TPopup, TResult>
+        where TPopup : Window, new()
+    {
+        return ShowPopupInternal<TComponentModel, TPopup, TResult>(options, configureBuilder);
+    }
+
+    private async Task<PopupResult<TResult>> ShowPopupInternal<TComponentModel, TPopup, TResult>(PopupOptions options, Action<ParameterBuilder<TComponentModel>>? configureBuilder)
         where TComponentModel : class, IPopupComponentModel<TPopup, TResult>
         where TPopup : Window, new()
     {
@@ -40,12 +62,19 @@ public sealed class PopupWindowService : IPopupWindowService
         var componentModel = (TComponentModel)_serviceProvider.GetRequiredKeyedService<IComponentModel>(typeof(TComponentModel));
         var popup = CreatePopup<TPopup>(componentModel);
 
+        if (configureBuilder is not null)
+        {
+            var builder = new ParameterBuilder<TComponentModel>();
+            configureBuilder(builder);
+            builder.ApplyPropertyValues(componentModel);
+        }
+
         TrySetOwner(options, popup);
         ConfigureEvents<TComponentModel, TPopup, TResult>(componentModel, popup, options);
 
         var resultTask = componentModel.GetResult();
-        _ = resultTask.ContinueWith(_ => 
-            popup.Dispatcher.Invoke(() => SafeClose(popup)), 
+        _ = resultTask.ContinueWith(_ =>
+            popup.Dispatcher.Invoke(() => SafeClose(popup)),
             TaskScheduler.Default
         );
 

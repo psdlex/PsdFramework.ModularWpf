@@ -1,7 +1,7 @@
 using System.Linq.Expressions;
 using System.Reflection;
 
-namespace PsdFramework.ModularWpf.Navigations.Builder;
+namespace PsdFramework.ModularWpf.Parameters;
 
 public sealed class ParameterBuilder<T>
 {
@@ -13,8 +13,10 @@ public sealed class ParameterBuilder<T>
 
     public ParameterBuilder<T> SetPropertyValue<TProperty>(Expression<Func<T, TProperty>> selector, TProperty value)
     {
-        if (selector.Body is not MemberExpression memberExpr || memberExpr.Member is not PropertyInfo propInfo || propInfo.CanWrite == false)
-            throw new ArgumentException("Selector is not directing to a property or the property is not writable.");
+        if (selector.Body is not MemberExpression memberExpr || memberExpr.Member is not PropertyInfo propInfo)
+            throw new InvalidOperationException("Member is not a property");
+
+        Utils.EnsurePropertyIntegrity(propInfo);
 
         _parameters.Add(propInfo, value);
         return this;
@@ -44,11 +46,7 @@ public sealed class ParameterBuilder
 
         var propInfo = _targetType.GetProperty(propertyName, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
 
-        if (propInfo is null)
-            throw new ArgumentException($"Property '{propertyName}' does not exist in type '{_targetType.Name}'.");
-
-        if (propInfo.CanWrite == false)
-            throw new ArgumentException($"Property '{propertyName}' must be writable.");
+        Utils.EnsurePropertyIntegrity(propInfo);
 
         _parameters.Add(propInfo, value);
         return this;

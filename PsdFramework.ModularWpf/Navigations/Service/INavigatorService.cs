@@ -1,7 +1,7 @@
 ﻿using PsdFramework.ModularWpf.General.Models.Components;
-using PsdFramework.ModularWpf.Navigations.Builder;
 using PsdFramework.ModularWpf.Navigations.Models.Navigatable;
 using PsdFramework.ModularWpf.Navigations.Models.Navigation;
+using PsdFramework.ModularWpf.Parameters;
 
 namespace PsdFramework.ModularWpf.Navigations.Service;
 
