@@ -45,4 +45,20 @@ partial class NavigatorService
 
         return NavigateWithParameters(navigation, navigatable, parameterBuilder);
     }
+
+    // instance & instance
+    public Task NavigateTo(INavigationComponentModel navigation, INavigatableComponentModel navigatable)
+    {
+        return InternalNavigateTo(navigation, navigatable);
+    }
+
+    public Task NavigateTo(INavigationComponentModel navigation, INavigatableComponentModel navigatable, Action<ParameterBuilder> configureParameters)
+    {
+        return InternalNavigateTo(navigation, navigatable, configureParameters);
+    }
+
+    private Task InternalNavigateTo(INavigationComponentModel navigation, INavigatableComponentModel navigatable, Action<ParameterBuilder>? parameterBuilder = null)
+    {
+        return NavigateWithParameters(navigation, navigatable, parameterBuilder);
+    }
 }

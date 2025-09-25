@@ -30,20 +30,38 @@ partial class NavigatorService
     }
 
     // category & type
-    public Task NavigateTo(Type navigatableType, object category)
+    public Task NavigateTo(object category, Type navigatableType)
     {
-        return InternalNavigateTo(navigatableType, category);
+        return InternalNavigateTo(category, navigatableType);
     }
 
-    public Task NavigateTo(Type navigatableType, object category, Action<ParameterBuilder> configureParameters)
+    public Task NavigateTo(object category, Type navigatableType, Action<ParameterBuilder> configureParameters)
     {
-        return InternalNavigateTo(navigatableType, category, configureParameters);
+        return InternalNavigateTo(category, navigatableType, configureParameters);
     }
 
-    private Task InternalNavigateTo(Type navigatableType, object category, Action<ParameterBuilder>? parameterBuilder = null)
+    private Task InternalNavigateTo(object category, Type navigatableType, Action<ParameterBuilder>? parameterBuilder = null)
     {
         var navigation = _serviceProvider.GetRequiredKeyedService<INavigationComponentModel>(category);
         var navigatable = _serviceProvider.GetRequiredKeyedService<INavigatableComponentModel>(navigatableType);
+
+        return NavigateWithParameters(navigation, navigatable, parameterBuilder);
+    }
+
+    // category & instance
+    public Task NavigateTo(object category, INavigatableComponentModel navigatable)
+    {
+        return InternalNavigateTo(category, navigatable);
+    }
+
+    public Task NavigateTo(object category, INavigatableComponentModel navigatable, Action<ParameterBuilder> configureParameters)
+    {
+        return InternalNavigateTo(category, navigatable, configureParameters);
+    }
+
+    private Task InternalNavigateTo(object category, INavigatableComponentModel navigatable, Action<ParameterBuilder>? parameterBuilder = null)
+    {
+        var navigation = _serviceProvider.GetRequiredKeyedService<INavigationComponentModel>(category);
 
         return NavigateWithParameters(navigation, navigatable, parameterBuilder);
     }

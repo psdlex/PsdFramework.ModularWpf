@@ -20,6 +20,11 @@ public interface INavigatorService : IComponentModel
     Task NavigateTo<TNavigation>(Type navigatableType, Action<ParameterBuilder> configureParameters)
         where TNavigation : INavigationComponentModel;
 
+    Task NavigateTo<TNavigation>(INavigatableComponentModel navigatable)
+        where TNavigation : INavigationComponentModel;
+    Task NavigateTo<TNavigation>(INavigatableComponentModel navigatable, Action<ParameterBuilder> configureParameters)
+        where TNavigation : INavigationComponentModel;
+
 
     // category navigation
     Task NavigateTo<TNavigatable>(object category)
@@ -27,8 +32,11 @@ public interface INavigatorService : IComponentModel
     Task NavigateTo<TNavigatable>(object category, Action<ParameterBuilder<TNavigatable>> configureParameters)
         where TNavigatable : INavigatableComponentModel;
 
-    Task NavigateTo(Type navigatableType, object category);
-    Task NavigateTo(Type navigatableType, object category, Action<ParameterBuilder> configureParameters);
+    Task NavigateTo(object category, Type navigatableType);
+    Task NavigateTo(object category, Type navigatableType, Action<ParameterBuilder> configureParameters);
+
+    Task NavigateTo(object category, INavigatableComponentModel navigatable);
+    Task NavigateTo(object category, INavigatableComponentModel navigatable, Action<ParameterBuilder> configureParameters);
 
 
     // instance navigation
@@ -39,6 +47,9 @@ public interface INavigatorService : IComponentModel
 
     Task NavigateTo(INavigationComponentModel navigation, Type navigatableType);
     Task NavigateTo(INavigationComponentModel navigation, Type navigatableType, Action<ParameterBuilder> configureParameters);
+
+    Task NavigateTo(INavigationComponentModel navigation, INavigatableComponentModel navigatable);
+    Task NavigateTo(INavigationComponentModel navigation, INavigatableComponentModel navigatable, Action<ParameterBuilder> configureParameters);
 
 
     // other

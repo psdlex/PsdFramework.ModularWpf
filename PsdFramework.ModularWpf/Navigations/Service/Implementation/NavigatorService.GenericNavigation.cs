@@ -53,4 +53,25 @@ partial class NavigatorService
 
         return NavigateWithParameters(navigation, navigatable, configureParameters);
     }
+
+    // generic & instance
+    public Task NavigateTo<TNavigation>(INavigatableComponentModel navigatable)
+        where TNavigation : INavigationComponentModel
+    {
+        return InternalNavigateTo<TNavigation>(navigatable);
+    }
+
+    public Task NavigateTo<TNavigation>(INavigatableComponentModel navigatable, Action<ParameterBuilder> configureParameters)
+        where TNavigation : INavigationComponentModel
+    {
+        return InternalNavigateTo<TNavigation>(navigatable, configureParameters);
+    }
+
+    private Task InternalNavigateTo<TNavigation>(INavigatableComponentModel navigatable, Action<ParameterBuilder>? configureParameters = null)
+        where TNavigation : INavigationComponentModel
+    {
+        var navigation = _serviceProvider.GetRequiredKeyedService<INavigationComponentModel>(typeof(TNavigation));
+
+        return NavigateWithParameters(navigation, navigatable, configureParameters);
+    }
 }
