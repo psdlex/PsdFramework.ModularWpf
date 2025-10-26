@@ -5,7 +5,7 @@ using PsdFramework.ModularWpf.Parameters;
 
 namespace PsdFramework.ModularWpf.Navigations.Service;
 
-public interface INavigatorService : IComponentModel
+public interface INavigatorService
 {
     // generic navigation
     Task NavigateTo<TNavigation, TNavigatable>()
