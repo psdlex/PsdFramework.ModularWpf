@@ -30,10 +30,10 @@ public static class ServiceCollectionExtensions
         foreach (var type in componentModelTypes)
         {
             var descriptor = new ServiceDescriptor(
-                typeof(IComponentModel),
+                serviceType: typeof(IComponentModel),
                 serviceKey: type.ModelType,
-                type.ModelType,
-                type.IsCached
+                implementationType: type.ModelType,
+                lifetime: type.IsCached
                     ? ServiceLifetime.Scoped 
                     : ServiceLifetime.Transient
             );
@@ -41,11 +41,12 @@ public static class ServiceCollectionExtensions
             services.Add(descriptor);
 
             var utilised = false;
+
             foreach (var utiliser in utilisers)
                 utilised = utiliser.TryUtilise(services, type) || utilised;
 
             if (utilised == false)
-                throw new InvalidOperationException("Cant utilise that component model.");
+                throw new InvalidOperationException("Cant utilise that component model: " + type.ModelType.Name);
         }
 
         return services;
