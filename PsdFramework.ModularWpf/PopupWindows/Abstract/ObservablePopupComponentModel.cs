@@ -1,7 +1,7 @@
 using System.Windows;
 
 using CommunityToolkit.Mvvm.ComponentModel;
-
+using PsdFramework.ModularWpf.Models;
 using PsdFramework.ModularWpf.PopupWindows.Models;
 using PsdFramework.ModularWpf.PopupWindows.Models.Result;
 
@@ -17,9 +17,15 @@ public abstract class ObservablePopupComponentModel<TPopup, TResult> : Observabl
         _completionSource = new();
     }
 
-    public virtual void OnPopupExit()
+    public virtual Task OnPopupOpened(ContextualParameters? parameters)
+    {
+        return Task.CompletedTask;
+    }
+
+    public virtual Task OnPopupClosed()
     {
         _completionSource.TrySetResult(new PopupResult<TResult>(PopupExitBasis.Unexpected, default));
+        return Task.CompletedTask;
     }
 
     protected virtual void SetResult(TResult result)

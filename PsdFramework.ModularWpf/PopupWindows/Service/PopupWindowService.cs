@@ -4,7 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
 using PsdFramework.ModularWpf.General.Models.Components;
-using PsdFramework.ModularWpf.Parameters;
+using PsdFramework.ModularWpf.Models;
 using PsdFramework.ModularWpf.PopupWindows.Models;
 using PsdFramework.ModularWpf.PopupWindows.Models.Result;
 using PsdFramework.ModularWpf.PopupWindows.Service.Managers;
@@ -39,21 +39,21 @@ public sealed class PopupWindowService : IPopupWindowService
         return ShowPopupInternal<TComponentModel, TPopup, TResult>(options, null);
     }
 
-    public Task<PopupResult<TResult>> ShowPopup<TComponentModel, TPopup, TResult>(Action<ParameterBuilder<TComponentModel>> configureBuilder)
+    public Task<PopupResult<TResult>> ShowPopup<TComponentModel, TPopup, TResult>(Action<ContextualParameters> configureParameters)
         where TComponentModel : class, IPopupComponentModel<TPopup, TResult>
         where TPopup : Window, new()
     {
-        return ShowPopupInternal<TComponentModel, TPopup, TResult>(new PopupOptions(), configureBuilder);
+        return ShowPopupInternal<TComponentModel, TPopup, TResult>(new PopupOptions(), configureParameters);
     }
 
-    public Task<PopupResult<TResult>> ShowPopup<TComponentModel, TPopup, TResult>(PopupOptions options, Action<ParameterBuilder<TComponentModel>> configureBuilder)
+    public Task<PopupResult<TResult>> ShowPopup<TComponentModel, TPopup, TResult>(PopupOptions options, Action<ContextualParameters> configureParameters)
         where TComponentModel : class, IPopupComponentModel<TPopup, TResult>
         where TPopup : Window, new()
     {
-        return ShowPopupInternal<TComponentModel, TPopup, TResult>(options, configureBuilder);
+        return ShowPopupInternal<TComponentModel, TPopup, TResult>(options, configureParameters);
     }
 
-    private async Task<PopupResult<TResult>> ShowPopupInternal<TComponentModel, TPopup, TResult>(PopupOptions options, Action<ParameterBuilder<TComponentModel>>? configureBuilder)
+    private async Task<PopupResult<TResult>> ShowPopupInternal<TComponentModel, TPopup, TResult>(PopupOptions options, Action<ContextualParameters>? configureParameters)
         where TComponentModel : class, IPopupComponentModel<TPopup, TResult>
         where TPopup : Window, new()
     {
@@ -62,11 +62,11 @@ public sealed class PopupWindowService : IPopupWindowService
         var componentModel = (TComponentModel)_serviceProvider.GetRequiredKeyedService<IComponentModel>(typeof(TComponentModel));
         var popup = CreatePopup<TPopup>(componentModel);
 
-        if (configureBuilder is not null)
+        ContextualParameters? parameters = null;
+        if (configureParameters is not null)
         {
-            var builder = new ParameterBuilder<TComponentModel>();
-            configureBuilder(builder);
-            builder.ApplyPropertyValues(componentModel);
+            parameters = new ContextualParameters();
+            configureParameters(parameters);
         }
 
         TrySetOwner(options, popup);
@@ -79,6 +79,7 @@ public sealed class PopupWindowService : IPopupWindowService
         );
 
         popup.Show();
+        await componentModel.OnPopupOpened(parameters);
 
         var result = await resultTask;
 
@@ -98,10 +99,10 @@ public sealed class PopupWindowService : IPopupWindowService
         where TComponentModel : class, IPopupComponentModel<TPopup, TResult>
         where TPopup : Window, new()
     {
-        popup.Closing += (_, _) =>
+        popup.Closing += async (_, _) =>
         {
             _windowStateManager.SetClosingState(popup);
-            componentModel.OnPopupExit();
+            await componentModel.OnPopupClosed();
         };
 
         if (options.CloseOnDeactivation)

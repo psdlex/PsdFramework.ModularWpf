@@ -1,10 +1,9 @@
 ﻿using PsdFramework.ModularWpf.General.Models.Components;
-using PsdFramework.ModularWpf.Navigations.Models.Navigation;
 
 namespace PsdFramework.ModularWpf.Navigations.Models.Navigatable;
 
 public interface INavigatableComponentModel : IComponentModel
 {
-    Task OnNavigatedTo(INavigationComponentModel navigation);
-    Task OnNavigatedFrom(INavigationComponentModel navigation);
+    Task OnNavigatedTo(NavigationContext context);
+    Task OnNavigatingFrom(NavigationContext context);
 }

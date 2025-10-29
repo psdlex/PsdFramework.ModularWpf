@@ -9,5 +9,6 @@ public sealed class NavigatableComponentModelAttribute : ComponentModelAttribute
         Categories = categories;
     }
 
-    public object[] Categories { get; }
+    public object[] Categories { get; init; }
+    public string? DisplayName { get; init; }
 }

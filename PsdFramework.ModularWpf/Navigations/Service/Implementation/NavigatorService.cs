@@ -1,6 +1,8 @@
+using System.Reflection;
+using PsdFramework.ModularWpf.Models;
+using PsdFramework.ModularWpf.Navigations.Models;
 using PsdFramework.ModularWpf.Navigations.Models.Navigatable;
 using PsdFramework.ModularWpf.Navigations.Models.Navigation;
-using PsdFramework.ModularWpf.Parameters;
 
 namespace PsdFramework.ModularWpf.Navigations.Service;
 
@@ -13,37 +15,56 @@ public sealed partial class NavigatorService : INavigatorService
         _serviceProvider = serviceProvider;
     }
 
-    private Task NavigateWithParameters<TNavigatable>(INavigationComponentModel navigation, INavigatableComponentModel navigatable, Action<ParameterBuilder<TNavigatable>>? configureBuilder)
-        where TNavigatable : INavigatableComponentModel
+    private async Task NavigateWithParameters(INavigationComponentModel navigation, INavigatableComponentModel navigatable, Action<ContextualParameters>? configureParameters)
     {
-        if (configureBuilder is not null)
+        var parameters = ConfigureParameters(configureParameters);
+        var context = new NavigationContext()
         {
-            var builder = new ParameterBuilder<TNavigatable>();
-            configureBuilder(builder);
-            builder.ApplyPropertyValues((TNavigatable)navigatable);
-        }
+            NavigationComponentModel = navigation,
+            NavigationType = navigation.GetType(),
 
-        return Navigate(navigation, navigatable);
+            NavigatableComponentModel = navigatable,
+            NavigatableType = navigatable.GetType(),
+            NavigatableDisplayName = GetNavigatableDisplayName(navigatable),
+
+            Parameters = parameters
+        };
+
+        // notifying the navigation about the beginning of a navigation
+        await navigation.OnNavigating(context);
+        if (context.IsCancellationRequested)
+            return;
+
+        // notifying the previous navigatable about the leaving
+        if (navigation.CurrentModel is { } prev)
+            await prev.OnNavigatingFrom(context);
+
+        if (context.IsCancellationRequested)
+            return;
+
+        // cancellation is no longer possible
+        context.IsCancellationPossible = false;
+
+        await navigation.OnNavigated(context);
+        await navigatable.OnNavigatedTo(context);
     }
 
-    private Task NavigateWithParameters(INavigationComponentModel navigation, INavigatableComponentModel navigatable, Action<ParameterBuilder>? configureBuilder)
+    private string? GetNavigatableDisplayName(INavigatableComponentModel navigatable)
     {
-        if (configureBuilder is not null)
-        {
-            var builder = new ParameterBuilder(navigatable.GetType());
-            configureBuilder(builder);
-            builder.ApplyPropertyValues(navigatable);
-        }
-
-        return Navigate(navigation, navigatable);
+        return navigatable
+            .GetType()
+            .GetCustomAttribute<NavigatableComponentModelAttribute>()!
+            .DisplayName;
     }
 
-    private async Task Navigate(INavigationComponentModel navigation, INavigatableComponentModel navigatable)
+    private ContextualParameters? ConfigureParameters(Action<ContextualParameters>? configureParameters)
     {
-        await navigation.OnPreNavigated(navigatable);
+        if (configureParameters is null)
+            return null;
 
-        navigation.CurrentModel?.OnNavigatedFrom(navigation);
-        await navigation.OnNavigated(navigatable);
-        await navigatable.OnNavigatedTo(navigation);
+        var parameters = new ContextualParameters();
+        configureParameters(parameters);
+
+        return parameters;
     }
 }

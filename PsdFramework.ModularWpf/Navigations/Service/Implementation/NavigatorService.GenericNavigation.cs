@@ -1,7 +1,7 @@
 using Microsoft.Extensions.DependencyInjection;
+using PsdFramework.ModularWpf.Models;
 using PsdFramework.ModularWpf.Navigations.Models.Navigatable;
 using PsdFramework.ModularWpf.Navigations.Models.Navigation;
-using PsdFramework.ModularWpf.Parameters;
 
 namespace PsdFramework.ModularWpf.Navigations.Service;
 
@@ -15,14 +15,14 @@ partial class NavigatorService
         return InternalNavigateTo<TNavigation, TNavigatable>();
     }
 
-    public Task NavigateTo<TNavigation, TNavigatable>(Action<ParameterBuilder<TNavigatable>> configureParameters)
+    public Task NavigateTo<TNavigation, TNavigatable>(Action<ContextualParameters> configureParameters)
         where TNavigation : INavigationComponentModel
         where TNavigatable : INavigatableComponentModel
     {
         return InternalNavigateTo<TNavigation, TNavigatable>(configureParameters);
     }
 
-    private Task InternalNavigateTo<TNavigation, TNavigatable>(Action<ParameterBuilder<TNavigatable>>? configureParameters = null)
+    private Task InternalNavigateTo<TNavigation, TNavigatable>(Action<ContextualParameters>? configureParameters = null)
         where TNavigation : INavigationComponentModel
         where TNavigatable : INavigatableComponentModel
     {
@@ -39,13 +39,13 @@ partial class NavigatorService
         return InternalNavigateTo<TNavigation>(navigatableType);
     }
 
-    public Task NavigateTo<TNavigation>(Type navigatableType, Action<ParameterBuilder> configureParameters)
+    public Task NavigateTo<TNavigation>(Type navigatableType, Action<ContextualParameters> configureParameters)
         where TNavigation : INavigationComponentModel
     {
         return InternalNavigateTo<TNavigation>(navigatableType, configureParameters);
     }
 
-    private Task InternalNavigateTo<TNavigation>(Type navigatableType, Action<ParameterBuilder>? configureParameters = null)
+    private Task InternalNavigateTo<TNavigation>(Type navigatableType, Action<ContextualParameters>? configureParameters = null)
         where TNavigation : INavigationComponentModel
     {
         var navigation = _serviceProvider.GetRequiredKeyedService<INavigationComponentModel>(typeof(TNavigation));
@@ -61,13 +61,13 @@ partial class NavigatorService
         return InternalNavigateTo<TNavigation>(navigatable);
     }
 
-    public Task NavigateTo<TNavigation>(INavigatableComponentModel navigatable, Action<ParameterBuilder> configureParameters)
+    public Task NavigateTo<TNavigation>(INavigatableComponentModel navigatable, Action<ContextualParameters> configureParameters)
         where TNavigation : INavigationComponentModel
     {
         return InternalNavigateTo<TNavigation>(navigatable, configureParameters);
     }
 
-    private Task InternalNavigateTo<TNavigation>(INavigatableComponentModel navigatable, Action<ParameterBuilder>? configureParameters = null)
+    private Task InternalNavigateTo<TNavigation>(INavigatableComponentModel navigatable, Action<ContextualParameters>? configureParameters = null)
         where TNavigation : INavigationComponentModel
     {
         var navigation = _serviceProvider.GetRequiredKeyedService<INavigationComponentModel>(typeof(TNavigation));
