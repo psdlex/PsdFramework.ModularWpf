@@ -21,7 +21,6 @@ public static class ValidationContainerBehavior
         if (d is not FrameworkElement element || e.NewValue is not IValidatableDataContext dataContext)
             return;
 
-        element.Loaded += (s, e)
-            => dataContext.RegisterValidationContainerCommand.Execute(d);
+        dataContext.RegisterValidationContainerCommand.Execute(element);
     }
 }
