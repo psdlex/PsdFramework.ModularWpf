@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<TargetFramework>net8.0-windows</TargetFramework>
@@ -9,13 +9,14 @@
 		<BaseOutputPath>./../build/ExceptionHandling</BaseOutputPath>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 		<Title>PsdFramework.ModularWpf.ExceptionHandling</Title>
-		<Description>Exception handling extensions for the PsdFramework.ModularWpf</Description>
+		<Description>Exception handling extensions for the PsdFramework.ModularWpf.</Description>
 		<PackageProjectUrl>https://github.com/psdlex/PsdFramework.ModularWpf</PackageProjectUrl>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<RepositoryUrl>https://github.com/psdlex/PsdFramework.ModularWpf/tree/master/PsdFramework.ModularWpf.ExceptionHandling</RepositoryUrl>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
 		<Version>1.0.1</Version>
+		<Authors>psdlex</Authors>
 	</PropertyGroup>
 
 	<ItemGroup>

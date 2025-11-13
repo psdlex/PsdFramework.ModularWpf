@@ -9,13 +9,15 @@
 		<BaseOutputPath>./../build/Logging</BaseOutputPath>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 		<Title>PsdFramework.ModularWpf.Logging</Title>
-		<Description>Logging extensions for the PsdFramework.ModularWpf framework</Description>
+		<Description>Logging extensions for the PsdFramework.ModularWpf framework.</Description>
 		<PackageProjectUrl>https://github.com/psdlex/PsdFramework.ModularWpf</PackageProjectUrl>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<RepositoryUrl>https://github.com/psdlex/PsdFramework.ModularWpf/tree/master/PsdFramework.ModularWpf.Logging</RepositoryUrl>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
 		<Version>1.1.1</Version>
+		<Authors>psdlex</Authors>
+		<RepositoryType>git</RepositoryType>
 	</PropertyGroup>
 
 	<ItemGroup>

@@ -9,13 +9,15 @@
 		<BaseOutputPath>./../build/ModularWpf</BaseOutputPath>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 		<Title>PsdFramework.ModularWpf</Title>
-		<Description>A small framework library for creating comprehensive modular WPF applications</Description>
+		<Description>A small framework library for creating comprehensive modular WPF applications.</Description>
 		<PackageProjectUrl>https://github.com/psdlex/PsdFramework.ModularWpf</PackageProjectUrl>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<RepositoryUrl>https://github.com/psdlex/PsdFramework.ModularWpf</RepositoryUrl>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
-		<Version>2.6.0</Version>
+		<Version>2.6.1</Version>
+		<Authors>psdlex</Authors>
+		<RepositoryType>git</RepositoryType>
 	</PropertyGroup>
 
 	<ItemGroup>
