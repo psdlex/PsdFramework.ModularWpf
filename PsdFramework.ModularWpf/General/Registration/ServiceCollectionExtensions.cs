@@ -1,7 +1,7 @@
 using System.Reflection;
 
 using Microsoft.Extensions.DependencyInjection;
-
+using PsdExtensions.OptionalService;
 using PsdFramework.ModularWpf.General.Models.Components;
 using PsdFramework.ModularWpf.Internal.FeatureUtiliser;
 
@@ -12,6 +12,8 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection AddComponentModels(this IServiceCollection services) => services.AddComponentModels(_ => true);
     public static IServiceCollection AddComponentModels(this IServiceCollection services, Func<Assembly, bool> assemblyFilter)
     {
+        AddRequiredServices(services);
+
         var componentModelTypes = AppDomain
             .CurrentDomain
             .GetAssemblies()
@@ -50,5 +52,10 @@ public static class ServiceCollectionExtensions
         }
 
         return services;
+    }
+
+    private static void AddRequiredServices(IServiceCollection services)
+    {
+        services.AddOptionalServices();
     }
 }

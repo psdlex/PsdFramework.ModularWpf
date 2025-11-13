@@ -1,8 +1,7 @@
 using System.Windows;
-
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-
+using PsdExtensions.OptionalService;
 using PsdFramework.ModularWpf.General.Models.Components;
 using PsdFramework.ModularWpf.Models;
 using PsdFramework.ModularWpf.PopupWindows.Models;
@@ -14,13 +13,13 @@ namespace PsdFramework.ModularWpf.PopupWindows.Service;
 public sealed class PopupWindowService : IPopupWindowService
 {
     private readonly IServiceProvider _serviceProvider;
-    private readonly ILogger<PopupWindowService> _logger;
+    private readonly ILogger<PopupWindowService>? _logger;
     private readonly WindowStateManager _windowStateManager;
 
-    public PopupWindowService(IServiceProvider serviceProvider, ILogger<PopupWindowService> logger)
+    public PopupWindowService(IServiceProvider serviceProvider, OptionalService<ILogger<PopupWindowService>> logger)
     {
         _serviceProvider = serviceProvider;
-        _logger = logger;
+        _logger = logger.Service;
 
         _windowStateManager = new();
     }
@@ -57,7 +56,7 @@ public sealed class PopupWindowService : IPopupWindowService
         where TComponentModel : class, IPopupComponentModel<TPopup, TResult>
         where TPopup : Window, new()
     {
-        _logger.LogDebug("Showing new popup: " + typeof(TPopup).Name);
+        _logger?.LogDebug("Showing new popup: " + typeof(TPopup).Name);
 
         var componentModel = (TComponentModel)_serviceProvider.GetRequiredKeyedService<IComponentModel>(typeof(TComponentModel));
         var popup = CreatePopup<TPopup>(componentModel);

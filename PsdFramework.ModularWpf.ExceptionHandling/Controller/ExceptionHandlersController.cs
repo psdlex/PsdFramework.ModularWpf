@@ -4,7 +4,7 @@ using System.Windows.Threading;
 
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-
+using PsdExtensions.OptionalService;
 using PsdFramework.ModularWpf.ExceptionHandling.Models;
 
 namespace PsdFramework.ModularWpf.ExceptionHandling.Controller;
@@ -13,15 +13,15 @@ public sealed class ExceptionHandlersController
 {
     private readonly ExceptionHandlersControllerOptions _options;
     private readonly IExceptionHandler[] _handlers;
-    private readonly ILogger<ExceptionHandlersController> _logger;
+    private readonly ILogger<ExceptionHandlersController>? _logger;
 
     public ExceptionHandlersController(
         IOptions<ExceptionHandlersControllerOptions> options,
-        ILogger<ExceptionHandlersController> logger,
+        OptionalService<ILogger<ExceptionHandlersController>> logger,
         IEnumerable<IExceptionHandler> handlers)
     {
         _options = options.Value;
-        _logger = logger;
+        _logger = logger.Service;
 
         var unsortedHandlers = handlers;
         _handlers = GetSortedHandlers(unsortedHandlers).ToArray();
@@ -29,7 +29,7 @@ public sealed class ExceptionHandlersController
 
     public async Task Handle(DispatcherUnhandledExceptionEventArgs e)
     {
-        _logger.LogWarning("Exception has been thrown and is being handled: {Exception}", e.Exception.Message);
+        _logger?.LogWarning("Exception has been thrown and is being handled: {Exception}", e.Exception.Message);
 
         var context = new ModularContext(e);
 
@@ -39,7 +39,7 @@ public sealed class ExceptionHandlersController
 
             if (context.IsHandled)
             {
-                _logger.LogInformation("Exception handled by {Handler}.", handler.GetType().Name);
+                _logger?.LogInformation("Exception handled by {Handler}.", handler.GetType().Name);
                 return;
             }
         }

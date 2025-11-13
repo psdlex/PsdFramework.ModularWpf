@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-using System.Printing;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -8,7 +6,6 @@ using CommunityToolkit.Mvvm.Input;
 using PsdFramework.ModularWpf.Models;
 using PsdFramework.ModularWpf.PopupWindows.Models;
 using PsdFramework.ModularWpf.PopupWindows.Models.Result;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace PsdFramework.ModularWpf.PopupWindows.Abstract;
 
@@ -41,6 +38,9 @@ public abstract partial class ObservablePopupComponentModel<TPopup, TResult> : O
         _completionSource.TrySetResult(new PopupResult<TResult>(PopupExitBasis.Intentional, result));
     }
 
+    /// <summary>
+    /// Must be used alongside the ValidationContainerBehavior
+    /// </summary>
     protected IReadOnlyList<ValidationError> GetValidationErrors()
     {
         if (_container is null)
