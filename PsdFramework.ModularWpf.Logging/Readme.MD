@@ -25,6 +25,9 @@ The limitations are set for the sake of simplicity.
 
 #### If the allowed namespaces are not specified, the logger will allow everything.
 
+#### Built-in namespace variables:
+- `$RunningProjectName` - the name of the running project *(use-case: "AllowedNamespaces": [ "$RunningProjectName" ])*
+
 ## How to setup?
 ```csharp
 serviceCollection.AddLogging(builder => {

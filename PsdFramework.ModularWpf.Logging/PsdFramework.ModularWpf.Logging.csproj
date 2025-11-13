@@ -15,7 +15,7 @@
 		<RepositoryUrl>https://github.com/psdlex/PsdFramework.ModularWpf/tree/master/PsdFramework.ModularWpf.Logging</RepositoryUrl>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
-		<Version>1.1.0</Version>
+		<Version>1.1.1</Version>
 	</PropertyGroup>
 
 	<ItemGroup>

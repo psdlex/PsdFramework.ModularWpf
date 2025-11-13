@@ -186,3 +186,10 @@ async Task ShowPopup()
     MyPopupResult result = await _popupService.ShowPopupAsync<MainViewModel, MyPopupViewModel, MyPopupResult>(/* can pass parameters & options */);
 }
 ```
+
+## For Logger/Exception handlers see the documentations below
+- Logger - https://github.com/psdlex/PsdFramework.ModularWpf/tree/master/PsdFramework.ModularWpf.Logging
+- ExceptionHandler - https://github.com/psdlex/PsdFramework.ModularWpf/tree/master/PsdFramework.ModularWpf.ExceptionHandling
+
+## Nuget
+https://www.nuget.org/packages/PsdFramework.ModularWpf/
