@@ -1,0 +1,13 @@
+<Solution>
+  <Folder Name="/samples/">
+    <Project Path="SampleProject/SampleProject.csproj" Id="cd0d61ef-836b-41d7-b9cb-e643dbcbfc22" />
+  </Folder>
+  <Folder Name="/src/">
+    <Project Path="src/PsdFramework.ModularWpf.ExceptionHandling/PsdFramework.ModularWpf.ExceptionHandling.csproj" />
+    <Project Path="src/PsdFramework.ModularWpf.Logging/PsdFramework.ModularWpf.Logging.csproj" />
+    <Project Path="src/PsdFramework.ModularWpf/PsdFramework.ModularWpf.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/PsdFramework.ModularWpf.Tests.Unit/PsdFramework.ModularWpf.Tests.Unit.csproj" Id="9ef16af0-28a7-47c9-8fab-b2373b7aea30" />
+  </Folder>
+</Solution>
