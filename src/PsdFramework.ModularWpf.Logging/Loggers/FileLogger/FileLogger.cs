@@ -1,8 +1,6 @@
-using System.IO;
-
 using Microsoft.Extensions.Logging;
-
 using PsdFramework.ModularWpf.Logging.Models;
+using System.IO;
 
 namespace PsdFramework.ModularWpf.Logging.Loggers.FileLogger;
 

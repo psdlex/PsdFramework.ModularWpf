@@ -1,8 +1,8 @@
+using Microsoft.Extensions.Options;
+using PsdFramework.ModularWpf.ExceptionHandling.Models;
 using System.Runtime.ExceptionServices;
 using System.Windows;
 using System.Windows.Threading;
-using Microsoft.Extensions.Options;
-using PsdFramework.ModularWpf.ExceptionHandling.Models;
 
 namespace PsdFramework.ModularWpf.ExceptionHandling.Controller;
 

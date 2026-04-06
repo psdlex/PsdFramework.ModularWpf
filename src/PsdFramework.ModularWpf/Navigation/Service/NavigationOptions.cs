@@ -21,7 +21,7 @@ public sealed class NavigationOptions
     internal INavigatable? Navigatable { get; private set; }
 
     internal object? Category { get; private set; }
-    internal Action<ContextualParameters>? ParameterConfiguration { get; private set; }
+    internal Action<ContextualParametersBuilder>? ParametersBuilderConfiguration { get; private set; }
 
     public static NavigationOptions FromNavigationHost(Type navigationHostType) => new() { NavigationHostType = navigationHostType };
     public static NavigationOptions FromNavigationHost(INavigationHost navigationHost) => new() { NavigationHost = navigationHost };
@@ -34,7 +34,7 @@ public sealed class NavigationOptions
     {
         if (IsNavigatableSet)
             throw new InvalidOperationException("Navigatable is already set.");
-        
+
         IsNavigatableSet = true;
         NavigatableType = navigatableType;
         return this;
@@ -53,13 +53,13 @@ public sealed class NavigationOptions
     public NavigationOptions ToNavigatable<TNavigatable>() where TNavigatable : INavigatable
         => ToNavigatable(typeof(TNavigatable));
 
-    public NavigationOptions WithParameters(Action<ContextualParameters> parameterConfiguration)
+    public NavigationOptions WithParameters(Action<ContextualParametersBuilder> parametersConfiguration)
     {
         if (_areParametersConfigured)
             throw new InvalidOperationException("Parameters are already set.");
 
         _areParametersConfigured = true;
-        ParameterConfiguration = parameterConfiguration;
+        ParametersBuilderConfiguration = parametersConfiguration;
         return this;
     }
 }

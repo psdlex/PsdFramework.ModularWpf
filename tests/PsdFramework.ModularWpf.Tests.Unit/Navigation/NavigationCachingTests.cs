@@ -6,10 +6,6 @@ using PsdFramework.ModularWpf.Navigation.Abstract;
 using PsdFramework.ModularWpf.Navigation.Navigatable;
 using PsdFramework.ModularWpf.Navigation.NavigationHost;
 using PsdFramework.ModularWpf.Navigation.Service;
-using System;
-using System.Collections.Generic;
-using System.Security.Policy;
-using System.Text;
 
 namespace PsdFramework.ModularWpf.Tests.Unit.Navigation;
 

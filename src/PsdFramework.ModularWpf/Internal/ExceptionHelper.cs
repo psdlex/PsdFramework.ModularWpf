@@ -12,5 +12,5 @@ internal static class ExceptionHelper
     [DoesNotReturn]
     public static void ThrowComponentModelInterfaceImplementationRequired(Type attributeType, Type interfaceType)
         => throw new NotImplementedException($"Attribute '{attributeType}' requires a model to implement '{interfaceType}' interface.");
-        
+
 }

@@ -1,6 +1,6 @@
-using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
 using PsdFramework.ModularWpf.Internal;
+using System.Reflection;
 
 namespace PsdFramework.ModularWpf.General;
 
@@ -34,7 +34,7 @@ public static class ServiceCollectionExtensions
             foreach (var utiliser in utilisers)
             {
                 if (ComponentUtility.TryCreateDescription(
-                    modelType, 
+                    modelType,
                     utiliser.AttributeType,
                     isShared: isShared,
                     isCachedByDefault: cacheByDefault,

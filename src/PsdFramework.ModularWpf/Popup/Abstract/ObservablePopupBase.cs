@@ -1,11 +1,11 @@
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Media;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using PsdFramework.ModularWpf.Models;
 using PsdFramework.ModularWpf.Popup.Models;
 using PsdFramework.ModularWpf.Popup.Models.Result;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Media;
 
 namespace PsdFramework.ModularWpf.Popup.Abstract;
 
@@ -22,8 +22,8 @@ public abstract class ObservablePopupBase<TWindow, TResult> : ObservableObject, 
 
     public IRelayCommand<DependencyObject> RegisterValidatableContainerCommand { get; }
 
-    public virtual Task OnOpenedAsync(ContextualParameters parameters) => Task.CompletedTask;
-    public virtual Task OnClosedAsync()
+    public virtual Task OnPopupOpenedAsync(ContextualParameters parameters) => Task.CompletedTask;
+    public virtual Task OnPopupClosedAsync()
     {
         _resultCompletionSource.TrySetResult(new PopupResult<TResult>(PopupExitBasis.ExternalTermination, default));
         return Task.CompletedTask;

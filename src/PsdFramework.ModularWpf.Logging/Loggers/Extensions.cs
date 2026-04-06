@@ -13,13 +13,13 @@ internal static class Extensions
             .ToArray();
 
         return namespaces.Length == 0
-        || namespaces.Any(ns => 
+        || namespaces.Any(ns =>
             ns is not null &&
             categoryName.StartsWith(ns, StringComparison.OrdinalIgnoreCase)
         );
     }
 
     public static bool HasAcceptableLogLevel(this IModularLogger logger, LogLevel logLevel)
-        => logger.Data.MinimumLevel == LogLevel.None 
+        => logger.Data.MinimumLevel == LogLevel.None
         || logger.Data.MinimumLevel <= logLevel;
 }

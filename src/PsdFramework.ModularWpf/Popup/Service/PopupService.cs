@@ -36,12 +36,12 @@ internal sealed class PopupService : IPopupService
 
     private ContextualParameters GetParameters(PopupOptions options)
     {
-        if (options.ParameterConfiguration is null)
-            return ContextualParameters.Empty;
+        if (options.ParametersBuilderConfiguration is null)
+            return ContextualParameters.Empty();
 
-        var parameters = new ContextualParameters();
-        options.ParameterConfiguration.Invoke(parameters);
+        var builder = new ContextualParametersBuilder();
+        options.ParametersBuilderConfiguration.Invoke(builder);
 
-        return parameters;
+        return builder.Build();
     }
 }

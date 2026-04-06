@@ -1,54 +1,64 @@
 # PsdFramework.ModularWpf
 
+[![NuGet Version](https://img.shields.io/nuget/dt/PsdFramework.ModularWpf?style=flat&logo=nuget&label=NuGet)](https://www.nuget.org/packages/PsdFramework.ModularWpf)
+[![Exception Handler](https://img.shields.io/badge/Github-Exception_Handling-green?style=flat&logo=github)](https://www.github.com/psdlex/PsdFramework.ModularWpf/tree/master/PsdFramework.ModularWpf.ExceptionHandling)
+[![Logging](https://img.shields.io/badge/Github-Logging-green?style=flat&logo=github)](https://www.github.com/psdlex/PsdFramework.ModularWpf/tree/master/PsdFramework.ModularWpf.Logging)
+
 #### `ModularWpf` is based on the `CommunityToolkit.Mvvm` package. A framework library that helps with modular design in a WPF application.
 
 ## Features
-- Scalable and convenient navigation model for navigating between views using view-models.
-- Abstract support for dialog windows with view-models. (Keeps the Mvvm pattern satisfied)
-- Convenient base classes for view-models and views.
+- Scalable and convenient navigation model for navigating between the view models.
+- Abstract support for dialog windows with models.
 - Automatic View-ViewModel binder.
-- Everything is built on top of `Microsoft.Extensions.DependencyInjection` for view-models which makes it easy to integrate into existing applications using this DI framework.
+- Validation container behavior for the popup windows.
+- Everything is built on top of `Microsoft.Extensions.DependencyInjection` for view-models which makes it easy to integrate into an existing application using this DI framework.
+
+#### Additional
 - Easy-to-use app-level exception handler.
 - Very simple logger for minimal tasks.
 
 ## How to setup your code-base
 For the complete experience, inherit the `IModularApplication` interface in your `App.xaml.cs` file.
+You can do it by using the `ModularApplicationBase` class, or by implementing the interface yourself.
 This way you can access the extension methods provided by the framework.
 
 ### App.xaml.cs
 ```csharp
-public sealed partial class App : WinApp, IModularApplication
+public sealed partial class App : ModularApplication
 {
-    public IServiceProvider? ServiceProvider { get; private set; } // IModularApplication implementation
-
     protected override void OnStartup(StartupEventArgs e)
     {
         base.OnStartup(e);
-        this.AddGlobalExceptionHandler(); // extension method for IModularApplication
 
-        IServiceCollection services = new ServiceCollection();
-        services.AddComponentModels(/* optional assembly filtering predicate: assembly => ... */); // the step that includes the components
+        // Extension method for IModularApplication.
+        // Requires the PsdFramework.ModularWpf.ExceptionHandling package.
+        this.AddGlobalExceptionHandler();
 
+        var services = new ServiceCollection();
+        services.AddComponents(/* optional assembly filtering predicate: assembly => ... */); // the step that includes the components
+
+        // This property is contained within the ModularApplication base class.
         ServiceProvider = services.BuildServiceProvider();
     }
 }
 ```
 
-## How to setup the MainWindow as an Mvvm model
-We need to remove the `StartupUri` from the `App.xaml` file and register the `MainViewModel` as a component model implementing `IViewComponentModel<MainWindow>` instead.
+## How to setup the MainWindow as an MVVM-based model
+We need to remove the `StartupUri` from the `App.xaml` file and register the `MainViewModel` as a component model marked using the `[View<TWindow>]` attribute.
 
-### App.xaml
+#### App.xaml
 ```xml
 <Application
-    StartupUri="..." // REMOVE THIS LINE
+    StartupUri="..." <!-- Remove this line -->
 ```
 
-### MainViewModel.cs
+#### MainViewModel.cs
 ```csharp
-public sealed partial class MainViewModel : ObservableObject, IViewComponentModel<MainWindow>;
+[View<MainWindow>]
+public sealed partial class MainViewModel : ObservableObject;
 ```
 
-### App.xaml.cs
+#### App.xaml.cs
 ```csharp
 protected override void OnStartup()
 {
@@ -61,135 +71,151 @@ protected override void OnStartup()
 }
 ```
 
-`IView` contains `TView View { get; }` property where `TView` is a `FrameworkElement`.
-If you want to access `IView`'s view-model as well, then use the `IView<TView, TViewModel>` interface. (Ex: IView<MainWindow, MainViewModel>().Model)
+`IView<TView>` contains the `View` property where `TView` is a `FrameworkElement`.
+If you want to access `IView`'s model as well, then use the `IView<TView, TModel>` interface. *(Ex: `IView<MainWindow, MainViewModel>().Model`)*
 
-### Types of components
-- `INavigationComponentModel` - component that marks a view-model as a navigation base. A model that stores navigation models inside of it.
-- `INavigatableComponentModel` - component that marks a view-model as navigatable. A model that can be navigated to.
-- `IPopupComponentModel` - component that marks a view-model as a popup/dialog. A model that can be shown as a dialog window. (not the view itself, but the view's model)
-- `IViewComponentModel` - component that marks a view-model as a view for a specific view type to be obtained by the `IView` service.
+## Types of components
+- `[NavigationHost]` - component that marks the model as a navigation host. A model that contains navigatable models and is considered as a "browser".
+- `[Navigatable]` - component that marks the model as a navigatable. A model that can be navigated to/from.
+- `[Popup<TWindow>]` - component that marks the model as a popup/dialog. A model that can be used as a context for a dialog window.
+- `[View<TWindow>]` - component that marks the model as a context for a specific view.
 
-### Types of services
-- `INavigatorService` - service that manages the navigations for `navigation models` via `navigatable models`.
-- `IPopupWindowService` - service that manages the showing of dialog windows via `popup models`.
+## Types of services
+- `INavigationService` - service that manages the navigations within a **navigation host** using a **navigatable model**.
+- `IPopupService` - service that manages the dialog/popup windows using a **popup model** and a **popup window**.
 
-## How to setup navigations
-First of all we need to define a navigation model that will hold the navigatable models. We will use `MainViewModel` as for our example.
-You can use `INavigationComponentModel` directly, but there is ton of boilerplate to write, so lets use a built-in base class instead.
-`ObservableNavigationComponentModel` - abstract class that implements `INavigationComponentModel` and extends the `ObservableObject` class to provide observable properties for binding.
+## How to setup the navigation
+First of all, we need to incorporate the navigation service into our DI container by using an extension method.
+```csharp
+serviceCollection.AddNavigationService();
+```
+
+Then, we need to define a navigation host that will control the navigatables.
+First step is to mark the model using the `[NavigationHost]` attribute.
+After that, you can implement the `INavigationHost` directly, but there is a lot of code to implement, so its preferable to use the built-in base class instead.
+`ObservableNavigationHostBase` - abstract class that implements `INavigationHost` and extends the `ObservableObject` class to provide observable properties for bindings.
 
 ```csharp
-[NavigationComponentModel(category: (object)"some category")]
-public sealed partial class MainViewModel : ObservableNavigationComponentModel
+[NavigationHost(category: (object)"some category")] // category is not mandatory
+public sealed partial class MyNavigationHost : ObservableNavigationHostBase
 {
-    public override Task OnNavigating(NavigationContext context)
+    public override Task OnNavigatingAsync(NavigationContext context)
     {
         return Task.CompletedTask;
     }
 
-    public override Task OnNavigated(NavigationContext context)
+    public override Task OnNavigatedAsync(NavigationContext context)
     {
-        base.OnNavigated(context); // KEEP THIS
+        base.OnNavigatedAsync(context); // Keep this. It will automatically assign the navigatable to the CurrentModel property.
         return Task.CompletedTask;
     }
 }
 ```
 
-Whats the difference between `OnNavigating` and `OnNavigated`?
-- `OnNavigating` is a stage of navigation where **navigation cancellation is still possible**. `NavigationContext` provides a method `Cancel()` that can cancel the navigation.
-- `OnNavigated` is a stage where everything is performed and actions cannot be interrupted anymore.
+#### Whats the difference between `OnNavigatingAsync` and `OnNavigatedAsync`?
+- `OnNavigatingAsync` is a phase of the navigation where **navigation cancellation is still possible**. `NavigationContext` provides the `Cancel` method that can cancel the navigation.
+- `OnNavigatedAsync` is a phase of the navigation where everything is performed and actions cannot be interrupted any further.
 
-`NavigationComponentModel` is required in order to differentiate between multiple navigation models if there are any. The `category` parameter is used as an identifier for the navigation group.
-You can use any object in order to identify the group, but using an enum is recommended. (Ex: `enum NavigationCategory { Default, Settings, etc... }`)
+For categorizing your navigation host, you can use any unique object in order to identify the group; But using an enum is recommended. *(Ex: `enum NavigationCategory { Default, Settings, etc... }`)*
 
-#### Next, we need to define some navigatable models that will be used as pages inside of the `MainViewModel` navigation model.
-```
-public sealed partial class HomeViewModel : ObservableNavigatableComponentModel
+#### Next, we need to define some navigatables that will be used as pages inside of the `MyNavigationHost` navigation host.
+```csharp
+public sealed partial class MyNavigatable : ObservableNavigatableBase
 {
-    public override Task OnNavigatedTo(NavigationContext context)
+    public override Task OnNavigatingToAsync(NavigationContext context)
     {
-        return base.OnNavigatedTo(context);
+        return base.OnNavigatingToAsync(context);
     }
 
-    public override Task OnNavigatingFrom(NavigationContext context)
+    public override Task OnNavigatedToAsync(NavigationContext context)
     {
-        return base.OnNavigatingFrom(context);
+        return base.OnNavigatedToAsync(context);
+    }
+
+    public override Task OnNavigatingFromAsync(NavigationContext context)
+    {
+        return base.OnNavigatingFromAsync(context);
+    }
+
+    public override Task OnNavigatedFromAsync(NavigationContext context)
+    {
+        return base.OnNavigatedFromAsync(context);
     }
 }
 ```
 
-I think you already differentiate methods that end with 'ed' and 'ing'.
-`OnNavigatingFrom` is still able to cancel the navigation, while `OnNavigatedTo` is not.
-`OnNavigatingFrom` can also be very helpful when you need to unsubscribe from events, stop some timers, or any other turn off any tasks that shouldn't work while the page is not active.
+#### Same concept as before:
+`OnNavigatingFromAsync/OnNavigatingToAsync` is where you are still able to cancel the navigation, while `OnNavigatedToAsync/OnNavigatedFromAsync` is where it's not possible anymore.
+`OnNavigatedFromAsync` can also be very helpful when you need to unsubscribe from events, stop refresh/update timers, or turn off any tasks that shouldn't work while the page is not active.
 
 #### How to navigate
 ```csharp
-// App.xaml.cs
-services.AddNavigator();
+// Inside some view-model or a service. For example MyNavigationHost.
+private readonly INavigationService _navigationService;
 
-// Inside some view-model. For example MainViewModel
-public MainViewModel(INavigatorService navigator)
+public MyNavigationHost(INavigationService navigationService)
 {
-    _navigator = navigator;
+    _navigationService = navigationService;
 }
 
-async Task Navigate() 
+public async Task Navigate() 
 {
-    await _navigator.NavigateTo<MainViewModel, HomeViewModel>(/* can pass parameters */);
-}
-```
-
-`.NavigateTo` has **18** overloads for all kinds of cases. You can also pass parameters, specify navigation categories, and more.
-
-### VERY IMPORTANT NOTE
-If your `navigation model` is **not** cached *(`IsCached` property in the `Attribute`)*, then you **must** use `navigation model` **instance** in the navigation call.
-Otherwise the navigator will get demand a service from a `IServiceCollection` while your `navigation model` is transient.. you understand what will happen, right?
-It will grab a completely new instance and your navigation will fail.
-
-## How to setup popup/dialog windows
-First of all we need to define a popup model that will be used as a dialog window.
-```csharp
-public sealed class MyPopupViewModel : ObservablePopupComponentModel<MyPopupWindow, MyPopupResult>
-{
-    public override Task OnPopupOpened(ContextualParameters? parameters)
-    {
-        return Task.CompletedTask;
-    }
-
-    public virtual Task OnPopupClosed()
-    {
-        return base.OnPopupClosed();
-    }
+    await _navigationService.NavigateAsync(NavigationOptions.FromNavigationHost(this).ToNavigatable<HomeViewModel>());
 }
 ```
 
-`MyPopupResult` is a type that will be used as the result of the dialog window. You can use `object`/`object?` if you don't need any specific result type.
+`NavigateAsync` method takes navigation options which is fairly flexible, and can take instances and types of the models you are working with.
+Navigation parameters are also possible to provide.
 
-- `SetResult()` - sets the result as successful/intended and closes the dialog.
-- `OnPopupOpened()`/`OnPopupClosed()` - pretty obvious
-- `ContextualParameters` are passed parameters when opening the dialog.
+### IMPORTANT NOTE
+If your **navigation host** is **not** cached *(`IsCached` property in the `NavigationHostAttribute` is set to false)*, then you should use the **instance** of the navigation host in the navigation options.
+Otherwise, the navigation service will demand a service from a `IServiceProvider` while your `navigation host` is transient, thus obtaining a completely new instance and failing the navigation execution.
 
 ## How to show popup/dialog windows
+As with the navigation, we need to incorporate the popup service in the DI container by using an extension method.
 ```csharp
-// App.xaml.cs
-services.AddPopupWindowService();
+serviceCollection.AddPopupService();
+```
 
-// Any viewmodel. MainViewModel for our case
-public MainViewModel(IPopupWindowService popupService)
-{
-    _popupService = popupService;
-}
+Then, we need to define a popup that will be the logic part of your window.
+Mark the model using the `[Popup<TWindow>]` attribute.
+After that, similarly, you can implement the `IPopup<TWindow, TResult>` directly, but using the built-in base class is **highly** recommended here.
+`ObservablePopupBase<TWindow, TResult>` - abstract class that implements `IPopup<TWindow, TResult>` and extends the `ObservableObject` class to provide observable properties for bindings.
+The base class also provides a `SetResult` method that allows you to easily close up the window and return a desired result.
 
-async Task ShowPopup()
+```csharp
+public sealed partial class MyPopup : ObservablePopupBase<MyWindow, string>;
+```
+
+We will also need the `Window` to inherit `IPopupWindow`. No implementation is required.
+
+```csharp
+public sealed partial class MyWindow : Window, IPopupWindow
 {
-    MyPopupResult result = await _popupService.ShowPopupAsync<MainViewModel, MyPopupViewModel, MyPopupResult>(/* can pass parameters & options */);
+    ...
 }
 ```
 
-## For Logger/Exception handlers see the documentations below
-- Logger - https://github.com/psdlex/PsdFramework.ModularWpf/tree/master/PsdFramework.ModularWpf.Logging
-- ExceptionHandler - https://github.com/psdlex/PsdFramework.ModularWpf/tree/master/PsdFramework.ModularWpf.ExceptionHandling
+#### Methods
+- `SetResult()` - sets the result as successful/intended and closes the dialog.
+- `OnPopupOpenedAsync()`/`OnPopupOpenedAsync()` - invoked when the corresponding events occur.
+- `GetValidationErrors()` - returns a read-only collection of validation errors within a specified validatable container.
 
-## Nuget
-https://www.nuget.org/packages/PsdFramework.ModularWpf/
+#### How to display
+```csharp
+public sealed partial class MyViewModel : ObservableObject
+{
+    private readonly IPopupService _popupService;
+
+    public MyViewModel(IPopupService popupService)
+    {
+        _popupService = popupService;
+    }
+
+    async Task ShowPopup()
+    {
+        var result = await _popupService.ShowPopupAsync<MyPopup, MyWindow, string>();
+        ...   
+    }
+}
+```

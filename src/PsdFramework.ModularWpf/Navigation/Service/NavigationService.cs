@@ -56,10 +56,10 @@ internal sealed class NavigationService : INavigationService
         context.IsCancellationPossible = false;
 
         await navigatable.OnNavigatedToAsync(context);
-        
+
         if (previousNavigatable is not null)
             await previousNavigatable.OnNavigatedFromAsync(context);
-    
+
         await navigationHost.OnNavigatedAsync(context);
     }
 
@@ -92,12 +92,12 @@ internal sealed class NavigationService : INavigationService
 
     private ContextualParameters GetParameters(NavigationOptions options)
     {
-        if (options.ParameterConfiguration is null)
-            return ContextualParameters.Empty;
+        if (options.ParametersBuilderConfiguration is null)
+            return ContextualParameters.Empty();
 
-        var parameters = new ContextualParameters();
-        options.ParameterConfiguration.Invoke(parameters);
+        var builder = new ContextualParametersBuilder();
+        options.ParametersBuilderConfiguration.Invoke(builder);
 
-        return parameters;
+        return builder.Build();
     }
 }

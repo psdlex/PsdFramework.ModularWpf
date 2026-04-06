@@ -17,7 +17,7 @@ public sealed class NavigationContext
     public required INavigatable Navigatable { get; init; }
 
     public string? NavigatableDisplayName { get; init; }
-    public ContextualParameters Parameters { get; init; } = ContextualParameters.Empty;
+    public ContextualParameters Parameters { get; init; } = ContextualParameters.Empty();
 
     public void CancelNavigation()
     {

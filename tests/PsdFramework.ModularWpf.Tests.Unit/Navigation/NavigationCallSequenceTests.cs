@@ -78,7 +78,7 @@ file sealed class MyNavigationHost : ObservableNavigationHostBase
     }
 }
 
-file abstract class NavigatableBase: ObservableNavigatableBase
+file abstract class NavigatableBase : ObservableNavigatableBase
 {
     private readonly Queue<MethodCallInfo> _callSequence;
 

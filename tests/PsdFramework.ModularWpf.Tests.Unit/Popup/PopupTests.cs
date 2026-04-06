@@ -67,7 +67,7 @@ public sealed class PopupTests
 [Popup]
 file sealed class MyPopup : ObservablePopupBase<FakePopupWindow, string>
 {
-    public override async Task OnOpenedAsync(ContextualParameters parameters)
+    public override async Task OnPopupOpenedAsync(ContextualParameters parameters)
     {
         await Task.Delay(100);
         SetResult("result");
@@ -85,7 +85,7 @@ file sealed class MyPopupCached : ObservablePopupBase<FakePopupWindow, string>
         _guidList = guidList;
     }
 
-    public override async Task OnOpenedAsync(ContextualParameters parameters)
+    public override async Task OnPopupOpenedAsync(ContextualParameters parameters)
     {
         _guidList.Add(_id);
         await Task.Delay(100);

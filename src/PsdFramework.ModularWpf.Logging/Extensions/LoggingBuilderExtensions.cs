@@ -12,7 +12,7 @@ public static class LoggingBuilderExtensions
     public static ILoggingBuilder AddPsdFramework(this ILoggingBuilder builder, IConfiguration configuration)
     {
         var loggers = configuration.GetRequiredSection("ModularLoggers").Get<ModularLoggerData[]>();
-        
+
         foreach (var logger in loggers ?? [])
         {
             Func<ModularLoggerData, ILoggerProvider> provider = logger.Sink switch

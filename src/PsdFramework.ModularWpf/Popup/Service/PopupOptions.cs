@@ -13,7 +13,7 @@ public sealed class PopupOptions
 
     internal Window? Owner { get; private set; }
     internal bool CloseOnDeactivation { get; private set; }
-    internal Action<ContextualParameters>? ParameterConfiguration { get; private set; }
+    internal Action<ContextualParametersBuilder>? ParametersBuilderConfiguration { get; private set; }
 
     public static PopupOptions Empty() => new();
 
@@ -37,13 +37,13 @@ public sealed class PopupOptions
         return this;
     }
 
-    public PopupOptions WithParameters(Action<ContextualParameters> arameterConfiguration)
+    public PopupOptions WithParameters(Action<ContextualParametersBuilder> parametersConfiguration)
     {
         if (_areParametersConfigured)
             throw new InvalidOperationException("Parameters are already set.");
 
         _areParametersConfigured = true;
-        ParameterConfiguration = ParameterConfiguration;
+        ParametersBuilderConfiguration = parametersConfiguration;
         return this;
     }
 }

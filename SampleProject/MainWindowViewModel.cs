@@ -1,5 +1,4 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
+﻿using CommunityToolkit.Mvvm.Input;
 using PsdFramework.ModularWpf.General;
 using PsdFramework.ModularWpf.Navigation.Abstract;
 using PsdFramework.ModularWpf.Navigation.NavigationHost;
@@ -40,7 +39,7 @@ public sealed partial class MainWindowViewModel : ObservableNavigationHostBase
     private async Task OnShowPopupAsync()
     {
         var result = await _popupService.ShowPopupAsync<MyPopup, MyPopupWindow, MyPopupResult>(PopupOptions.Empty().WithOwner(App.Current.MainWindow));
-    
+
         if (result.ExitBasis == PopupExitBasis.ExternalTermination)
         {
             // Dont use MessageBox directly in a real project. Abstract it away using a DialogService to provide the testability.

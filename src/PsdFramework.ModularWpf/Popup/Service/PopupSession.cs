@@ -1,7 +1,6 @@
 ﻿using PsdFramework.ModularWpf.Models;
 using PsdFramework.ModularWpf.Popup.Models;
 using PsdFramework.ModularWpf.Popup.Models.Result;
-using System.Windows;
 
 namespace PsdFramework.ModularWpf.Popup.Service;
 
@@ -36,9 +35,9 @@ internal sealed class PopupSession<TPopup, TWindow, TResult>
 
         _popupWindow.Show();
 
-        await _popup.OnOpenedAsync(parameters);
+        await _popup.OnPopupOpenedAsync(parameters);
         var result = await resultTask;
-        await _popup.OnClosedAsync();
+        await _popup.OnPopupClosedAsync();
 
         return result;
     }
@@ -49,7 +48,7 @@ internal sealed class PopupSession<TPopup, TWindow, TResult>
         _popupWindow.Closed -= OnWindowClosed;
         _popupWindow.Deactivated -= OnWindowDeactivated;
 
-        await _popup.OnClosedAsync();
+        await _popup.OnPopupClosedAsync();
     }
 
     private void TryClose()

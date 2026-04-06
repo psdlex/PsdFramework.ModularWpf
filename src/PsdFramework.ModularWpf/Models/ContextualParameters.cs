@@ -2,21 +2,18 @@ namespace PsdFramework.ModularWpf.Models;
 
 public sealed class ContextualParameters
 {
-    private readonly Dictionary<object, object?> _parameters = [];
-    private readonly HashSet<object> _keylessParameters = [];
+    private readonly IReadOnlyDictionary<object, object?> _parameters;
+    private readonly IReadOnlyCollection<object> _keylessParameters;
 
-    internal ContextualParameters()
+    internal ContextualParameters(IReadOnlyDictionary<object, object?> parameters, IReadOnlyCollection<object> keylessParameters)
     {
+        _parameters = parameters;
+        _keylessParameters = keylessParameters;
     }
 
-    public void Add(object key, object? value) => _parameters.Add(key, value);
-    public void Add(object keylessParameter)
-    {
-        if (_keylessParameters.Any(p => p.GetType() == keylessParameter.GetType()))
-            throw new ArgumentException($"Keyless parameter with type '{keylessParameter.GetType()}' already exists.", nameof(keylessParameter));
+    public object? this[string key] => _parameters[key];
+    internal static ContextualParameters Empty() => new(new Dictionary<object, object?>(0), []);
 
-        _keylessParameters.Add(keylessParameter);
-    }
 
     public T? TryGetValue<T>(object key)
     {
@@ -51,7 +48,4 @@ public sealed class ContextualParameters
         return typedValue;
     }
 
-    public object? this[string key] => _parameters[key];
-
-    public static readonly ContextualParameters Empty = new();
 }

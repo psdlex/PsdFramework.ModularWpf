@@ -1,9 +1,7 @@
-using System.Windows.Threading;
-
 using Microsoft.Extensions.DependencyInjection;
-
 using PsdFramework.ModularWpf.ExceptionHandling.Controller;
 using PsdFramework.ModularWpf.ModuarApplication;
+using System.Windows.Threading;
 
 namespace PsdFramework.ModularWpf.ExceptionHandling.Extensions;
 

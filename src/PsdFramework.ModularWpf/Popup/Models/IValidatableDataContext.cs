@@ -1,5 +1,5 @@
-﻿using System.Windows;
-using CommunityToolkit.Mvvm.Input;
+﻿using CommunityToolkit.Mvvm.Input;
+using System.Windows;
 
 namespace PsdFramework.ModularWpf.Popup.Models;
 

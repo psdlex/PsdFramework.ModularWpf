@@ -1,5 +1,5 @@
-using System.Windows;
 using PsdFramework.ModularWpf.Popup.Models;
+using System.Windows;
 
 namespace PsdFramework.ModularWpf.Popup.Behaviors;
 

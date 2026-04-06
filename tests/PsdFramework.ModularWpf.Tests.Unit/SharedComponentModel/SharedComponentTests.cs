@@ -56,6 +56,6 @@ public sealed class SharedComponentTests
 file sealed class SharedModel : ObservableNavigationHostAndNavigatableBase, IPopup<FakePopupWindow, SharedModel?>
 {
     public Task<PopupResult<SharedModel?>> GetResultAsync() => Task.FromResult(new PopupResult<SharedModel?>(PopupExitBasis.Intentional, this));
-    public Task OnClosedAsync() => Task.CompletedTask;
-    public Task OnOpenedAsync(ContextualParameters parameters) => Task.CompletedTask;
+    public Task OnPopupClosedAsync() => Task.CompletedTask;
+    public Task OnPopupOpenedAsync(ContextualParameters parameters) => Task.CompletedTask;
 }

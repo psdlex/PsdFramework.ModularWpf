@@ -2,10 +2,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using PsdFramework.ModularWpf.General;
 using PsdFramework.ModularWpf.View.Models;
-using System;
-using System.Collections.Generic;
-using System.Runtime.ExceptionServices;
-using System.Text;
 using System.Windows;
 
 namespace PsdFramework.ModularWpf.Tests.Unit.View;
@@ -57,7 +53,7 @@ public sealed class ViewTests
         });
     }
 
-    
+
 }
 
 [View<MyView>]

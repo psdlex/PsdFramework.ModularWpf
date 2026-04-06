@@ -8,7 +8,8 @@ public static class TestHelper
     public static void ExecuteOnStaThread(Action action)
     {
         Exception? exception = null;
-        var thread = new Thread(() => {
+        var thread = new Thread(() =>
+        {
             try { action(); }
             catch (Exception ex) { exception = ex; }
         });
@@ -24,7 +25,8 @@ public static class TestHelper
     public static void ExecuteOnStaThread(Func<Task> func)
     {
         Exception? exception = null;
-        var thread = new Thread(() => {
+        var thread = new Thread(() =>
+        {
             var dispatcher = Dispatcher.CurrentDispatcher;
             SynchronizationContext.SetSynchronizationContext(new DispatcherSynchronizationContext(dispatcher));
 

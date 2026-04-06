@@ -1,6 +1,7 @@
 # PsdFramework.ModularWpf.Logging
-
 #### Logging extensions for the `PsdFramework.ModularWpf` framework.
+
+[![NuGet Version](https://img.shields.io/nuget/dt/PsdFramework.ModularWpf.Logging?style=flat&logo=nuget&label=NuGet)](https://www.nuget.org/packages/PsdFramework.ModularWpf.Logging)
 
 ## How to configure?
 It can only be configured through the `IConfiguration` interface, usually through the `appsettings.json` file.

@@ -18,7 +18,7 @@ public sealed class ConsoleLogger : ILogger, IModularLogger
     public ModularLoggerData Data { get; }
 
     IDisposable ILogger.BeginScope<TState>(TState state) => null!;
-    public bool IsEnabled(LogLevel logLevel) 
+    public bool IsEnabled(LogLevel logLevel)
         => Data.MinimumLevel == LogLevel.None
         || Data.MinimumLevel <= logLevel;
 

@@ -1,5 +1,4 @@
-﻿using System.ComponentModel;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Threading;
 
 namespace PsdFramework.ModularWpf.Popup.Models;
