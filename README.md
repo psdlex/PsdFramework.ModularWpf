@@ -10,6 +10,7 @@
 - Scalable and convenient navigation model for navigating between the view models.
 - Abstract support for dialog windows with models.
 - Automatic View-ViewModel binder.
+- Service interceptors that allow you to extend the functionality of a given service.
 - Validation container behavior for the popup windows.
 - Everything is built on top of `Microsoft.Extensions.DependencyInjection` for view-models which makes it easy to integrate into an existing application using this DI framework.
 
@@ -35,7 +36,7 @@ public sealed partial class App : ModularApplication
         this.AddGlobalExceptionHandler();
 
         var services = new ServiceCollection();
-        services.AddComponents(/* optional assembly filtering predicate: assembly => ... */); // the step that includes the components
+        services.AddComponents(); // The step that includes the components
 
         // This property is contained within the ModularApplication base class.
         ServiceProvider = services.BuildServiceProvider();
@@ -85,18 +86,13 @@ If you want to access `IView`'s model as well, then use the `IView<TView, TModel
 - `IPopupService` - service that manages the dialog/popup windows using a **popup model** and a **popup window**.
 
 ## How to setup the navigation
-First of all, we need to incorporate the navigation service into our DI container by using an extension method.
-```csharp
-serviceCollection.AddNavigationService();
-```
-
-Then, we need to define a navigation host that will control the navigatables.
-First step is to mark the model using the `[NavigationHost]` attribute.
+First of all, we need to define a navigation host that will control the navigatables.
+Then we need to mark the model using the `[NavigationHost]` attribute.
 After that, you can implement the `INavigationHost` directly, but there is a lot of code to implement, so its preferable to use the built-in base class instead.
 `ObservableNavigationHostBase` - abstract class that implements `INavigationHost` and extends the `ObservableObject` class to provide observable properties for bindings.
 
 ```csharp
-[NavigationHost(category: (object)"some category")] // category is not mandatory
+[NavigationHost(Category = (object)"some category")] // Category is not mandatory
 public sealed partial class MyNavigationHost : ObservableNavigationHostBase
 {
     public override Task OnNavigatingAsync(NavigationContext context)
@@ -172,12 +168,7 @@ If your **navigation host** is **not** cached *(`IsCached` property in the `Navi
 Otherwise, the navigation service will demand a service from a `IServiceProvider` while your `navigation host` is transient, thus obtaining a completely new instance and failing the navigation execution.
 
 ## How to show popup/dialog windows
-As with the navigation, we need to incorporate the popup service in the DI container by using an extension method.
-```csharp
-serviceCollection.AddPopupService();
-```
-
-Then, we need to define a popup that will be the logic part of your window.
+First, we need to define a popup that will be the logic part of your window.
 Mark the model using the `[Popup<TWindow>]` attribute.
 After that, similarly, you can implement the `IPopup<TWindow, TResult>` directly, but using the built-in base class is **highly** recommended here.
 `ObservablePopupBase<TWindow, TResult>` - abstract class that implements `IPopup<TWindow, TResult>` and extends the `ObservableObject` class to provide observable properties for bindings.
@@ -216,6 +207,36 @@ public sealed partial class MyViewModel : ObservableObject
     {
         var result = await _popupService.ShowPopupAsync<MyPopup, MyWindow, string>();
         ...   
+    }
+}
+```
+
+## Interceptors
+Interceptors are DI objects that can be resolved as a transient or a singleton service.
+
+#### As for the latest version, these services support execution interception:
+- `INavigationService` *(Pre/Post)*
+- `IPopupService` *(Pre/Post)*
+
+### How to use interceptors
+Lets create a navigation service interceptor.
+You can implement `IInterceptor<>` interface, but using the built-in base class is recommended.
+If you implement an interface with 2 generic arguments, then the methods with no context argument will be ignored during the runtime.
+
+```csharp
+[Interceptor]
+// Important note: 2nd generic parameter (NavigationContext) is not mandatory, but then your interception will not be able
+// to access the service's context.
+public sealed class NavigationInterceptor : InterceptorBase<INavigationService, NavigationContext>
+{
+    public override async Task InterceptPreExecutionAsync(NavigationContext context)
+    {
+        ...
+    }
+
+    public override async Task InterceptPostExecutionAsync(NavigationContext context)
+    {
+        ...
     }
 }
 ```
