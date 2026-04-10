@@ -1,8 +1,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using PsdFramework.ModularWpf.Internal;
-using PsdFramework.ModularWpf.Navigation.NavigationHost;
 
-namespace PsdFramework.ModularWpf.Navigation.ComponentsUtilisers;
+namespace PsdFramework.ModularWpf.Navigation.NavigationHost;
 
 internal sealed class NavigationHostComponentUtiliser : ComponentUtiliser<NavigationHostAttribute>
 {

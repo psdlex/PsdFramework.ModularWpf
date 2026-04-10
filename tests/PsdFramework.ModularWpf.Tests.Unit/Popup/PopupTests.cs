@@ -2,7 +2,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using PsdFramework.ModularWpf.General;
 using PsdFramework.ModularWpf.Models;
-using PsdFramework.ModularWpf.Popup;
 using PsdFramework.ModularWpf.Popup.Abstract;
 using PsdFramework.ModularWpf.Popup.Models;
 using PsdFramework.ModularWpf.Popup.Models.Result;
@@ -18,8 +17,7 @@ public sealed class PopupTests
     public PopupTests()
     {
         _provider = new ServiceCollection()
-            .AddComponents()
-            .AddPopupService()
+            .AddComponents(ComponentOptions.Empty().WithConcreteTypes([typeof(MyPopup), typeof(MyPopupCached), typeof(AutoClosingPopup)]))
             .AddSingleton(new List<Guid>(2))
             .BuildServiceProvider();
 
@@ -67,7 +65,7 @@ public sealed class PopupTests
 [Popup]
 file sealed class MyPopup : ObservablePopupBase<FakePopupWindow, string>
 {
-    public override async Task OnPopupOpenedAsync(ContextualParameters parameters)
+    public override async Task OnPopupOpenedAsync(Models.ContextualParameters parameters)
     {
         await Task.Delay(100);
         SetResult("result");
@@ -85,7 +83,7 @@ file sealed class MyPopupCached : ObservablePopupBase<FakePopupWindow, string>
         _guidList = guidList;
     }
 
-    public override async Task OnPopupOpenedAsync(ContextualParameters parameters)
+    public override async Task OnPopupOpenedAsync(Models.ContextualParameters parameters)
     {
         _guidList.Add(_id);
         await Task.Delay(100);

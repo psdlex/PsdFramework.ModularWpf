@@ -11,7 +11,7 @@ internal static class ComponentUtility
         description = null;
 
         if (attributeType.IsAssignableTo(typeof(ComponentAttribute)) == false)
-            ExceptionHelper.ThrowAttributeNotComponent(attributeType);
+            ExceptionHelper.ThrowAttributeIsNotComponent(attributeType);
 
         if (modelType.GetCustomAttribute(attributeType) is not ComponentAttribute attribute)
             return false;
@@ -29,7 +29,7 @@ internal static class ComponentUtility
         return true;
     }
 
-    public static bool IsModelShared(Type modelType) => modelType.IsDefined(typeof(SharedComponentModelAttribute), inherit: false);
+    public static bool IsSharedComponentModel(Type modelType) => modelType.IsDefined(typeof(SharedComponentModelAttribute), inherit: false);
 
     private static bool IsCached(ComponentAttribute attribute, bool isCachedByDefault)
     {

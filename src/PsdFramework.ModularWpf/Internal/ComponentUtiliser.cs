@@ -8,7 +8,7 @@ internal abstract class ComponentUtiliser
     protected ComponentUtiliser(Type attributeType)
     {
         if (attributeType.IsAssignableTo(typeof(ComponentAttribute)) == false)
-            ExceptionHelper.ThrowAttributeNotComponent(attributeType);
+            ExceptionHelper.ThrowAttributeIsNotComponent(attributeType);
 
         AttributeType = attributeType;
     }

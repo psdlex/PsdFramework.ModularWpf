@@ -17,8 +17,7 @@ public sealed class NavigationCachingTests
     public NavigationCachingTests()
     {
         _provider = new ServiceCollection()
-            .AddComponents()
-            .AddNavigationService()
+            .AddComponents(ComponentOptions.Empty().WithConcreteTypes([typeof(MyNavigationHost), typeof(MyNavigatable)]))
             .BuildServiceProvider();
 
         _navigationService = _provider.GetRequiredService<INavigationService>();

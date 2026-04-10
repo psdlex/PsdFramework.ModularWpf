@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using PsdFramework.ModularWpf.Interceptors;
 using PsdFramework.ModularWpf.Models;
 using PsdFramework.ModularWpf.Navigation.Navigatable;
 using PsdFramework.ModularWpf.Navigation.NavigationHost;
@@ -9,10 +10,12 @@ namespace PsdFramework.ModularWpf.Navigation.Service;
 internal sealed class NavigationService : INavigationService
 {
     private readonly IServiceProvider _serviceProvider;
+    private readonly IEnumerable<IInterceptor<INavigationService>> _interceptors;
 
-    public NavigationService(IServiceProvider serviceProvider)
+    public NavigationService(IServiceProvider serviceProvider, IEnumerable<IInterceptor<INavigationService>> interceptors)
     {
         _serviceProvider = serviceProvider;
+        _interceptors = interceptors;
     }
 
     public async Task NavigateAsync(NavigationOptions options)
@@ -33,6 +36,11 @@ internal sealed class NavigationService : INavigationService
             NavigatableDisplayName = GetNavigatableDisplayName(navigatable),
             Parameters = GetParameters(options)
         };
+
+        await InterceptorHelper.InterceptAllAsync(_interceptors, context, InterceptorHelper.InterceptionPhase.PreExecution);
+
+        if (context.IsCancellationRequested)
+            return;
 
         // pipeline
         var previousNavigatable = navigationHost.CurrentModel;
@@ -61,6 +69,8 @@ internal sealed class NavigationService : INavigationService
             await previousNavigatable.OnNavigatedFromAsync(context);
 
         await navigationHost.OnNavigatedAsync(context);
+
+        await InterceptorHelper.InterceptAllAsync(_interceptors, context, InterceptorHelper.InterceptionPhase.PostExecution);
     }
 
     private INavigatable GetNavigatable(NavigationOptions options)

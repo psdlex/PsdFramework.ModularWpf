@@ -1,8 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using PsdFramework.ModularWpf.Internal;
-using PsdFramework.ModularWpf.Navigation.Navigatable;
 
-namespace PsdFramework.ModularWpf.Navigation.ComponentsUtilisers;
+namespace PsdFramework.ModularWpf.Navigation.Navigatable;
 
 internal sealed class NavigatableComponentUtiliser : ComponentUtiliser<NavigatableAttribute>
 {

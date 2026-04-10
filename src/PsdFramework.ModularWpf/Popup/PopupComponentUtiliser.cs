@@ -10,7 +10,7 @@ internal sealed class PopupComponentUtiliser : ComponentUtiliser<PopupAttribute>
     {
         if (description.ModelType
             .GetInterfaces()
-            .FirstOrDefault(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IPopup<,>)) is not { } @interface)
+            .FirstOrDefault(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IPopup<,>)) is not { } popupInterface)
         {
             return;
         }
@@ -18,7 +18,7 @@ internal sealed class PopupComponentUtiliser : ComponentUtiliser<PopupAttribute>
         if (description.IsSharedModel)
         {
             services.AddKeyedSingleton(
-                serviceType: @interface,
+                serviceType: popupInterface,
                 serviceKey: description.ModelType,
                 implementationFactory: (p, _) => p.GetRequiredService(description.ModelType)
             );
@@ -27,7 +27,7 @@ internal sealed class PopupComponentUtiliser : ComponentUtiliser<PopupAttribute>
         else
         {
             services.Add(new ServiceDescriptor(
-                serviceType: @interface,
+                serviceType: popupInterface,
                 serviceKey: description.ModelType,
                 implementationType: description.ModelType,
                 lifetime: description.IsCached ? ServiceLifetime.Singleton : ServiceLifetime.Transient

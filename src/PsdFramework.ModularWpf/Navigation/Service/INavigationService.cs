@@ -1,6 +1,8 @@
-﻿namespace PsdFramework.ModularWpf.Navigation.Service;
+﻿using PsdFramework.ModularWpf.Interceptors;
 
-public interface INavigationService
+namespace PsdFramework.ModularWpf.Navigation.Service;
+
+public interface INavigationService : IInterceptableService<NavigationContext>
 {
     public Task NavigateAsync(NavigationOptions options);
 }

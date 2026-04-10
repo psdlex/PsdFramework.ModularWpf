@@ -1,8 +1,10 @@
 ﻿using CommunityToolkit.Mvvm.Input;
 using PsdFramework.ModularWpf.General;
+using PsdFramework.ModularWpf.Navigation;
 using PsdFramework.ModularWpf.Navigation.Abstract;
 using PsdFramework.ModularWpf.Navigation.NavigationHost;
 using PsdFramework.ModularWpf.Navigation.Service;
+using PsdFramework.ModularWpf.Popup;
 using PsdFramework.ModularWpf.Popup.Models.Result;
 using PsdFramework.ModularWpf.Popup.Service;
 using PsdFramework.ModularWpf.View.Models;

@@ -1,18 +1,23 @@
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using PsdFramework.ModularWpf.Internal;
-using System.Reflection;
+using PsdFramework.ModularWpf.Navigation.Service;
+using PsdFramework.ModularWpf.Popup.Service;
 
 namespace PsdFramework.ModularWpf.General;
 
 public static class ServiceCollectionExtensions
 {
-    public static IServiceCollection AddComponents(this IServiceCollection services) => AddComponents(services, _ => true);
-    public static IServiceCollection AddComponents(this IServiceCollection services, Func<Assembly, bool> assemblyFilter, bool cacheByDefault = false)
+    public static IServiceCollection AddComponents(this IServiceCollection services) => AddComponents(services, ComponentOptions.Empty());
+    public static IServiceCollection AddComponents(this IServiceCollection services, ComponentOptions options)
     {
-        var modelTypes = AppDomain
+        services.TryAddTransient<IPopupService, PopupService>();
+        services.TryAddTransient<INavigationService, NavigationService>();
+
+        var modelTypes = options.ConcreteTypes?.ToArray() ?? AppDomain
             .CurrentDomain
             .GetAssemblies()
-            .Where(assemblyFilter)
+            .Where(options.AssemblyFilter ?? (_ => true))
             .SelectMany(a => a.GetTypes())
             .Where(t =>
                 t.IsClass &&
@@ -26,7 +31,7 @@ public static class ServiceCollectionExtensions
         foreach (var modelType in modelTypes)
         {
             var utilised = false;
-            var isShared = ComponentUtility.IsModelShared(modelType);
+            var isShared = ComponentUtility.IsSharedComponentModel(modelType);
 
             if (isShared)
                 services.AddSingleton(modelType);
@@ -37,7 +42,7 @@ public static class ServiceCollectionExtensions
                     modelType,
                     utiliser.AttributeType,
                     isShared: isShared,
-                    isCachedByDefault: cacheByDefault,
+                    isCachedByDefault: options.CacheByDefault,
                     out var description) == false)
                 {
                     continue;

@@ -13,7 +13,7 @@ public sealed class ViewTests
     public ViewTests()
     {
         _provider = new ServiceCollection()
-            .AddComponents()
+            .AddComponents(ComponentOptions.Empty().WithConcreteTypes([typeof(MyModel), typeof(MyModelCached)]))
             .BuildServiceProvider();
     }
 

@@ -1,18 +1,17 @@
-﻿using PsdFramework.ModularWpf.Models;
+﻿using PsdFramework.ModularWpf.Internal;
+using PsdFramework.ModularWpf.Models;
 using PsdFramework.ModularWpf.Navigation.Navigatable;
 using PsdFramework.ModularWpf.Navigation.NavigationHost;
 
-namespace PsdFramework.ModularWpf.Navigation.Service;
+namespace PsdFramework.ModularWpf.Navigation;
 
 public sealed class NavigationOptions
 {
-    private bool _areParametersConfigured;
+    private readonly OptionsBuildingManager _optionsBuildingManager = new();
 
     private NavigationOptions()
     {
     }
-
-    internal bool IsNavigatableSet { get; private set; }
 
     internal Type? NavigationHostType { get; private set; }
     internal Type? NavigatableType { get; private set; }
@@ -21,7 +20,10 @@ public sealed class NavigationOptions
     internal INavigatable? Navigatable { get; private set; }
 
     internal object? Category { get; private set; }
-    internal Action<ContextualParametersBuilder>? ParametersBuilderConfiguration { get; private set; }
+
+    internal bool IsNavigatableSet => _optionsBuildingManager.GetValue<bool>(nameof(IsNavigatableSet));
+    internal Action<ContextualParametersBuilder>? ParametersBuilderConfiguration
+        => _optionsBuildingManager.GetValue<Action<ContextualParametersBuilder>>(nameof(ParametersBuilderConfiguration));
 
     public static NavigationOptions FromNavigationHost(Type navigationHostType) => new() { NavigationHostType = navigationHostType };
     public static NavigationOptions FromNavigationHost(INavigationHost navigationHost) => new() { NavigationHost = navigationHost };
@@ -32,20 +34,16 @@ public sealed class NavigationOptions
 
     public NavigationOptions ToNavigatable(Type navigatableType)
     {
-        if (IsNavigatableSet)
-            throw new InvalidOperationException("Navigatable is already set.");
+        _optionsBuildingManager.ThrowOrContinueWithPropertyValue(nameof(IsNavigatableSet), true);
 
-        IsNavigatableSet = true;
         NavigatableType = navigatableType;
         return this;
     }
 
     public NavigationOptions ToNavigatable(INavigatable navigatable)
     {
-        if (IsNavigatableSet)
-            throw new InvalidOperationException("Navigatable is already set.");
+        _optionsBuildingManager.ThrowOrContinueWithPropertyValue(nameof(IsNavigatableSet), true);
 
-        IsNavigatableSet = true;
         Navigatable = navigatable;
         return this;
     }
@@ -55,11 +53,7 @@ public sealed class NavigationOptions
 
     public NavigationOptions WithParameters(Action<ContextualParametersBuilder> parametersConfiguration)
     {
-        if (_areParametersConfigured)
-            throw new InvalidOperationException("Parameters are already set.");
-
-        _areParametersConfigured = true;
-        ParametersBuilderConfiguration = parametersConfiguration;
+        _optionsBuildingManager.ThrowOrContinueWithPropertyValue(nameof(ParametersBuilderConfiguration), parametersConfiguration);
         return this;
     }
 }

@@ -6,7 +6,7 @@ namespace PsdFramework.ModularWpf.Internal;
 internal static class ExceptionHelper
 {
     [DoesNotReturn]
-    public static void ThrowAttributeNotComponent(Type attributeType)
+    public static void ThrowAttributeIsNotComponent(Type attributeType)
         => throw new InvalidOperationException($"Attribute '{attributeType}' is not derived from '{typeof(ComponentAttribute)}'.");
 
     [DoesNotReturn]

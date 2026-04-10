@@ -22,9 +22,7 @@ public sealed class SharedComponentTests
     public SharedComponentTests()
     {
         _provider = new ServiceCollection()
-            .AddComponents()
-            .AddNavigationService()
-            .AddPopupService()
+            .AddComponents(ComponentOptions.Empty().WithConcreteTypes([typeof(SharedModel)]))
             .BuildServiceProvider();
     }
 
@@ -57,5 +55,5 @@ file sealed class SharedModel : ObservableNavigationHostAndNavigatableBase, IPop
 {
     public Task<PopupResult<SharedModel?>> GetResultAsync() => Task.FromResult(new PopupResult<SharedModel?>(PopupExitBasis.Intentional, this));
     public Task OnPopupClosedAsync() => Task.CompletedTask;
-    public Task OnPopupOpenedAsync(ContextualParameters parameters) => Task.CompletedTask;
+    public Task OnPopupOpenedAsync(Models.ContextualParameters parameters) => Task.CompletedTask;
 }

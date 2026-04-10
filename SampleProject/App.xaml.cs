@@ -1,8 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using PsdFramework.ModularWpf.General;
-using PsdFramework.ModularWpf.Navigation;
-using PsdFramework.ModularWpf.Popup;
 using PsdFramework.ModularWpf.View.Models;
 using System.Windows;
 
@@ -15,10 +13,7 @@ public sealed partial class App : Application
         base.OnStartup(e);
 
         var builder = Host.CreateEmptyApplicationBuilder(null);
-        builder.Services
-            .AddComponents()
-            .AddNavigationService()
-            .AddPopupService();
+        builder.Services.AddComponents();
 
         var app = builder.Build();
 

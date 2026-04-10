@@ -17,8 +17,7 @@ namespace PsdFramework.ModularWpf.Tests.Unit.Navigation
         public NavigationCallSequenceTests()
         {
             _provider = new ServiceCollection()
-                .AddComponents()
-                .AddNavigationService()
+                .AddComponents(ComponentOptions.Empty().WithConcreteTypes([typeof(MyNavigationHost), typeof(OldNavigatable), typeof(NewNavigatable)]))
                 .AddSingleton<Queue<MethodCallInfo>>()
                 .BuildServiceProvider();
 

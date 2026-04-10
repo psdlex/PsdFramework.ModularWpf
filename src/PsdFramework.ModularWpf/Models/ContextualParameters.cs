@@ -1,3 +1,7 @@
+using Microsoft.Extensions.Logging.Abstractions;
+using System.Diagnostics.CodeAnalysis;
+using System.Windows.Input;
+
 namespace PsdFramework.ModularWpf.Models;
 
 public sealed class ContextualParameters
@@ -15,18 +19,31 @@ public sealed class ContextualParameters
     internal static ContextualParameters Empty() => new(new Dictionary<object, object?>(0), []);
 
 
-    public T? TryGetValue<T>(object key)
+    public bool TryGetValue<T>(object key, [NotNullWhen(true)] out T? value)
     {
-        return _parameters.TryGetValue(key, out var value) && value is T typedValue
-            ? typedValue
-            : default;
+        value = default;
+        
+        var success = _parameters.TryGetValue(key, out var boxedValue);
+        if (success == false)
+            return false;
+
+        if (boxedValue is not T)
+            throw new InvalidCastException($"Parameter with key '{key}' is not '{typeof(T)}'.");
+
+        value = (T)boxedValue;
+        return true;
     }
 
-    public T? TryGetValue<T>()
+    public bool TryGetValue<T>([NotNullWhen(true)] out T? value)
     {
-        return _keylessParameters.FirstOrDefault(p => p.GetType() == typeof(T)) is T typedValue
-            ? typedValue
-            : default;
+        value = default;
+
+        var parameter = _keylessParameters.FirstOrDefault(p => p.GetType() == typeof(T));
+        if (parameter is null)
+            return false;
+
+        value = (T)parameter;
+        return true;
     }
 
     public T GetValue<T>(object key)
